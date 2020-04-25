@@ -16,10 +16,22 @@ int main() {
 //     board.debug_display();
     Debug_view view(board2, snake);
     view.display();
-    snake.move();
+    // snake.grow();
+    // for (int i = 0; i < 9; ++i)
+        // snake.move();
+    // snake.move();
     // snake.move();
     view.display();
+    // snake.change_direction(Direction::RIGHT);
+    // // snake.display_dir();
+    // snake.move();
+    // snake.move();
+    // snake.move();
+    // snake.move();
+    // // snake.move();
+    // snake.grow();
  
+
     // snake.change_direction(Direction::LEFT);
     // snake.move();
     // snake.change_direction(Direction::RIGHT);

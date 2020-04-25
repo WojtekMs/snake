@@ -5,8 +5,10 @@ Snake::Snake(SnakeBoard &board)
       body(length),
       s_board(board)
 {
-    body[0].x = s_board.get_width() / 2 - 1;
-    body[0].y = s_board.get_height() / 2 - 1;
+    body[0].x = 4;
+    body[0].y = 1;
+    // body[0].x = s_board.get_width() / 2 - 1;
+    // body[0].y = s_board.get_height() / 2 - 1;
     for (int i = 1; i < length; ++i)
     {
         body[i].x = body[0].x - i;
@@ -101,22 +103,39 @@ void Snake::move()
     std::pair<int, int> even_idx, odd_idx;
     even_idx.first = body[0].x;
     even_idx.second = body[0].y;
-    if (current_dir == Direction::RIGHT)
+    switch (current_dir)
     {
+    case Direction::RIGHT:
         body[0].x += 1;
-    }
-    if (current_dir == Direction::DOWN)
-    {
+        break;
+    case Direction::DOWN:
         body[0].y += 1;
-    }
-    if (current_dir == Direction::LEFT)
-    {
+        break;
+    case Direction::LEFT:
         body[0].x -= 1;
-    }
-    if (current_dir == Direction::UP)
-    {
+        break;
+    case Direction::UP:
         body[0].y -= 1;
+        break;
     }
+    if (s_board.get_tile_info(body[0].x, body[0].y) == 'X')
+        s_board.current_game_state = GameState::FINISHED_LOSS;
+    // if (current_dir == Direction::RIGHT)
+    // {
+    //     body[0].x += 1;
+    // }
+    // if (current_dir == Direction::DOWN)
+    // {
+    //     body[0].y += 1;
+    // }
+    // if (current_dir == Direction::LEFT)
+    // {
+    //     body[0].x -= 1;
+    // }
+    // if (current_dir == Direction::UP)
+    // {
+    //     body[0].y -= 1;
+    // }
     for (int idx = 1; idx < length; ++idx)
     {
         if (idx % 2 != 0)
@@ -218,7 +237,7 @@ void Snake::grow()
     SnakePiece new_one;
     SnakePiece last = body[length - 1];
     SnakePiece after_last = body[length - 2];
-    if (after_last.x > last.x)
+    if (last.x < after_last.x)
     {
         new_one.x = last.x - 1;
         new_one.y = last.y;
@@ -231,13 +250,31 @@ void Snake::grow()
     if (after_last.y > last.y)
     {
         new_one.x = last.x;
-        new_one.y = last.y - 1;        
+        new_one.y = last.y - 1;
     }
     if (after_last.y < last.y)
     {
         new_one.x = last.x;
         new_one.y = last.y + 1;
     }
+    if (s_board.get_tile_info(new_one.x, new_one.y) == 'X')
+    {
+        std::pair<int, int> valid = get_valid(new_one.x, new_one.y);
+        new_one.x = valid.first;
+        new_one.y = valid.second;
+    }
     body.push_back(new_one);
     length++;
+}
+
+std::pair<int, int> Snake::get_valid(int x, int y)
+{
+    if (s_board.get_tile_info(x - 1, y - 1) == ' ')
+        return std::pair<int, int>(x - 1, y - 1);
+    if (s_board.get_tile_info(x + 1, y - 1) == ' ')
+        return std::pair<int, int>(x + 1, y - 1);
+    if (s_board.get_tile_info(x - 1, y + 1) == ' ')
+        return std::pair<int, int>(x - 1, y + 1);
+    if (s_board.get_tile_info(x + 1, y + 1) == ' ')
+        return std::pair<int, int>(x + 1, y + 1);
 }

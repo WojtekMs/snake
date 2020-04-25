@@ -30,6 +30,8 @@ class Snake
 
     Direction current_dir, prev_dir;
 
+    std::pair<int, int> get_valid(int x, int y);
+
 public:
     explicit Snake(SnakeBoard &board);
     void move();
@@ -37,12 +39,13 @@ public:
     int get_snake_piece_x(int idx) { return body[idx].x; };
     int get_snake_piece_y(int idx) { return body[idx].y; };
     int get_snake_piece_idx(int x, int y) const;
-    Direction get_current_dir() { return current_dir; };
+    Direction get_current_dir() const { return current_dir; };
     Direction get_prev_dir() { return prev_dir; };
-    int get_length() { return length; };
+    int get_length() const { return length; };
     void display_dir() const;
-    bool contains(int col, int row) const;
     void grow();
+    bool contains(int col, int row) const;
+    
 };
 
 #endif

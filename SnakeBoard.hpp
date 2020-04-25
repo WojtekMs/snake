@@ -12,7 +12,6 @@ enum GameState
 {
     RUNNING,
     FINISHED_LOSS,
-    FINISHED_WIN
 };
 struct board_tile
 {
@@ -22,6 +21,7 @@ struct board_tile
 
 class SnakeBoard
 {
+    friend class Snake;
 
     int height, width;
     Array2D<board_tile> board;
@@ -42,6 +42,7 @@ public:
     char get_tile_info(int col, int row) const;
     int get_height() { return height; };
     int get_width() { return width; };
+    GameState get_game_state() const { return current_game_state; };
 };
 
 #endif

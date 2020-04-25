@@ -53,9 +53,10 @@ bool SnakeBoard::is_inside(int col, int row) const
 
 bool SnakeBoard::out_of_range(int col, int row) const
 {
-    if (col < 0 && col > width)
-        if (row < 0 && row > height)
-            return true;
+    if (col < 0 || col > width)
+        return true;
+    if (row < 0 || row > height)
+        return true;
     return false;
 }
 
