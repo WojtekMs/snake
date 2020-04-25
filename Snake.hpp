@@ -1,25 +1,48 @@
 #ifndef SNAKE_HPP_
 #define SNAKE_HPP_
 #include "SnakeBoard.hpp"
+#include <vector>
 
-  enum Direction
+enum Direction
+{
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
+  struct SnakePiece
     {
-        LEFT,
-        RIGHT
+        int x;
+        int y;
     };
 
 class Snake
 {
-    SnakeBoard &s_board;
     int length;
-    int head_x, head_y;
+    std::vector<SnakePiece> body;
+    SnakeBoard &s_board;
 
-    Direction current_direction;
+    //not initialized
+    int head_x, head_y; //przechowuja wspolrzedne glowy //in current model not used
+    int tail_x, tail_y; //przechowuja wspolrzedne ogona //in current model not used
+    int speed;
+
+    Direction current_dir, prev_dir;
 
 public:
     explicit Snake(SnakeBoard &board);
-    void move(Direction current_direction);
+    void move();
     void change_direction(Direction dir);
+    int get_snake_piece_x(int idx) { return body[idx].x; };
+    int get_snake_piece_y(int idx) { return body[idx].y; };
+    int get_snake_piece_idx(int x, int y) const;
+    Direction get_current_dir() { return current_dir; };
+    Direction get_prev_dir() { return prev_dir; };
+    int get_length() { return length; };
+    void display_dir() const;
+    bool contains(int col, int row) const;
+    void grow();
 };
 
 #endif

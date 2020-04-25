@@ -12,7 +12,12 @@ void Debug_view::display() const
             if (v_board.get_tile_info(col, row) == 'F')
                 std::cout << "F";
             if (v_board.get_tile_info(col, row) == ' ')
-                std::cout << " ";
+            {
+                if (v_snake.contains(col, row))
+                    std::cout << "S";
+                else
+                    std::cout << " ";
+            }
 
             std::cout << " ]";
         }
