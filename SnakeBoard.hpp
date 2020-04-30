@@ -8,11 +8,7 @@ enum GameMode
     NORMAL,
     HARD
 };
-enum GameState
-{
-    RUNNING,
-    FINISHED_LOSS,
-};
+
 struct board_tile
 {
     bool has_obstacle;
@@ -21,12 +17,12 @@ struct board_tile
 
 class SnakeBoard
 {
-    friend class Snake;
+    // friend class Snake;
 
     int height, width;
     Array2D<board_tile> board;
     GameMode current_game_mode;
-    GameState current_game_state;
+    // GameState current_game_state;
     bool food;
 
     void set_size(int h, int w);
@@ -42,7 +38,6 @@ public:
     char get_tile_info(int col, int row) const;
     int get_height() { return height; };
     int get_width() { return width; };
-    GameState get_game_state() const { return current_game_state; };
 };
 
 #endif
