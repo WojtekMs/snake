@@ -1,7 +1,7 @@
 #include "Snake.hpp"
 
 Snake::Snake(SnakeBoard &board)
-    : length(5),
+    : length(3),
       body(length),
       s_board(board),
       head(&body[0]),
@@ -72,9 +72,6 @@ void Snake::display_dir() const
 
 void Snake::move()
 {
-    if (s_board.get_tile_info(head->x, head->y) == 'X')
-        current_game_state = GameState::FINISHED_LOSS;
-
     move_count++;
     if (current_dir == Direction::RIGHT) {
         tail->x = head->x + 1;
@@ -92,12 +89,34 @@ void Snake::move()
         tail->x = head->x;
         tail->y = head->y - 1;
     }
+    switch (s_board.get_tile_info(tail->x, tail->y)) {
+    case 'T':
+        tail->y = s_board.get_height() - 1;
+        break;
+    case 'B':
+        tail->y = 0;
+        break;
+    case 'L':
+        tail->x = s_board.get_width() - 1;
+        break;
+    case 'R':
+        tail->x = 0;
+    }
     head = tail;
     if (move_count % length != 0) {
         tail = &body[get_snake_piece_idx(tail->id - 1)];
     } else {
         move_count = 0;
         tail = &body[get_snake_piece_idx(length - 1)];
+    }
+
+    if (s_board.get_tile_info(head->x, head->y) == 'X')
+        current_game_state = GameState::FINISHED_LOSS;
+    int head_idx = get_snake_piece_idx(head->id);
+    for (int i = 0; i < length; ++i) {
+        if (i != head_idx && head->x == body[i].x && head->y == body[i].y) {
+            current_game_state = GameState::FINISHED_LOSS;
+        }
     }
 }
 
@@ -121,8 +140,7 @@ int Snake::get_snake_piece_idx(int col, int row) const
 
 int Snake::get_snake_piece_idx(int id) const
 {
-    for (int i = 0; i < body.size(); ++i)
-    {
+    for (int i = 0; i < body.size(); ++i) {
         if (body[i].id == id)
             return i;
     }
@@ -142,8 +160,7 @@ int Snake::sort_by_ids()
         }
         indices_and_ids.push_back(std::pair<int, int>(get_snake_piece_idx(element_id), length - 1 - i));
     }
-    for (int i = 0; i < body.size(); ++i)
-    {
+    for (int i = 0; i < body.size(); ++i) {
         body[indices_and_ids[i].first].id = indices_and_ids[i].second;
     }
 }

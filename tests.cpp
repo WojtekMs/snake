@@ -9,36 +9,26 @@ void snake_tests(Snake &snake, const Debug_view &view)
     // snake.grow();
     snake.move();
     snake.move();
-    view.display();
-    snake.grow();
-    view.display();
-    snake.move();
-    snake.move();
-    view.display();
-    snake.grow();
-    
-    snake.grow();
-    // // for (int i = 0; i < 9; ++i)
-    snake.move();
-    snake.move();
-    // // snake.move();
-    view.display();
-    // snake.grow();
+    // view.display();
     // snake.grow();
     // view.display();
+    snake.move();
+    snake.move();
+    // view.display();
+    // snake.grow();
+    
+    // snake.grow();
+    // // // for (int i = 0; i < 9; ++i)
+    snake.move();
+    snake.move();
+    // // // snake.move();
+    // view.display();
+    // // snake.grow();
+    // // snake.grow();
+    // // view.display();
 
-    snake.change_direction(Direction::RIGHT);
-    // // // // snake.display_dir();
-    snake.move();
-    snake.move();
-    snake.move();
-    snake.move();
-    snake.move();
-    snake.move();
-    view.display();
-    snake.grow();
-    snake.grow();
-    snake.grow();
+    // snake.change_direction(Direction::RIGHT);
+    // // // // // snake.display_dir();
     snake.move();
     snake.move();
     snake.move();
@@ -46,9 +36,21 @@ void snake_tests(Snake &snake, const Debug_view &view)
     snake.change_direction(Direction::LEFT);
     snake.move();
     snake.move();
-    snake.move();
-    snake.move();
+    // snake.move();
     view.display();
+    // snake.grow();
+    // snake.grow();
+    // snake.grow();
+    // snake.move();
+    // snake.move();
+    // snake.move();
+    // snake.move();
+    // snake.change_direction(Direction::LEFT);
+    // snake.move();
+    // snake.move();
+    // snake.move();
+    // snake.move();
+    // view.display();
     // snake.grow();
     // view.display();
     // snake.move();

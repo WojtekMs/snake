@@ -31,7 +31,7 @@ class Snake
     SnakeBoard &s_board;
     SnakePiece * head, * tail;
 
-    int speed;
+    int speed; //measured in tiles per second
     int move_count;
     
     GameState current_game_state;

@@ -1,5 +1,6 @@
 #include "SnakeBoard.hpp"
 #include <iostream>
+#include <algorithm>
 
 void SnakeBoard::set_size(int h, int w)
 {
@@ -15,7 +16,7 @@ void SnakeBoard::set_size(int h, int w)
     width = w;
 }
 
-void SnakeBoard::set_default_board()
+void SnakeBoard::set_board()
 {
     for (int row = 0; row < height; ++row) {
         for (int col = 0; col < width; ++col) {
@@ -24,6 +25,45 @@ void SnakeBoard::set_default_board()
                 board[row][col].has_obstacle = true;
             else
                 board[row][col].has_obstacle = false;
+        }
+    }
+   
+    for (int i = 0; i < horizontal_g_size; ++i)
+    {
+        board[0][(width - horizontal_g_size) / 2 + i].has_obstacle = false;
+        board[height - 1][(width - horizontal_g_size) / 2 + i].has_obstacle = false;
+        horizontal_gate_x[i] = (width - horizontal_g_size) / 2 + i;
+    }
+    for (int i = 0; i < vertical_g_size; ++i)
+    {
+        board[(height - vertical_g_size) / 2 + i][0].has_obstacle = false;
+        board[(height - vertical_g_size) / 2 + i][width - 1].has_obstacle = false;
+        vertical_gate_y[i] = (height - vertical_g_size) / 2 + i;
+
+    }
+
+    if (current_game_mode == GameMode::NORMAL || current_game_mode == GameMode::HARD) {
+        int obstacle_1_size = int(height * 0.5 + 0.5);
+        int obstacle_1_horizontal_indent = int(width * 0.167 + 0.5);
+        int obstacle_1_vertical_indent = int((height - obstacle_1_size) / 2.0 + 0.5);
+        for (int i = 0; i < obstacle_1_size; ++i) {
+            board[i + obstacle_1_vertical_indent][obstacle_1_horizontal_indent].has_obstacle = true;
+            board[i + obstacle_1_vertical_indent][width - 1 - obstacle_1_horizontal_indent].has_obstacle = true;
+        }
+
+        int distance_between_obstacles_1 = int(double(width - 2 - 2 * obstacle_1_horizontal_indent) + 0.5);
+        int obstacle_2_size = int(distance_between_obstacles_1 * 0.3125 + 0.5);
+        int obstacle_2_horizontal_indent = int(distance_between_obstacles_1 * 0.125 + 0.5);
+        for (int i = 0; i < obstacle_2_size; ++i) {
+            board[height / 2 - 1][i + obstacle_1_horizontal_indent + 1 + obstacle_2_horizontal_indent].has_obstacle = true;
+            board[height / 2 - 1][width - 1 - obstacle_1_horizontal_indent - obstacle_2_horizontal_indent - 1 - i].has_obstacle = true;
+        }
+
+        if (current_game_mode == GameMode::HARD) {
+            for (int i = 0; i < int(distance_between_obstacles_1 / 2.0 + 0.5); ++i) {
+                    board[obstacle_1_vertical_indent - 1][2 * i + obstacle_1_horizontal_indent + 1].has_obstacle = true;
+                    board[obstacle_1_vertical_indent + obstacle_1_size][2 * i + obstacle_1_horizontal_indent + 1].has_obstacle = true;
+            }
         }
     }
 }
@@ -58,13 +98,17 @@ bool SnakeBoard::out_of_range(int col, int row) const
 SnakeBoard::SnakeBoard(int h, int w, GameMode mode)
     : height(h),
       width(w),
+      horizontal_g_size(int((width - 2) * 0.2069 + 0.5)),
+      vertical_g_size(int((height - 2) * 0.2222 + 0.5)),
       board(w, h),
+      horizontal_gate_x(horizontal_g_size),
+      vertical_gate_y(vertical_g_size),
+      current_game_mode(mode),
       food(false)
 {
     set_size(h, w);
-    set_default_board();
+    set_board();
     draw_food();
-    current_game_mode = mode;
 }
 
 void SnakeBoard::debug_display() const
@@ -99,6 +143,14 @@ char SnakeBoard::get_tile_info(int col, int row) const
 {
     if (out_of_range(col, row))
         return '#';
+    if (row == 0 && std::find(horizontal_gate_x.begin(), horizontal_gate_x.end(), col) != horizontal_gate_x.end())
+        return 'T';
+    if (row == height - 1 && std::find(horizontal_gate_x.begin(), horizontal_gate_x.end(), col) != horizontal_gate_x.end())
+        return 'B';
+    if (col == 0 && std::find(vertical_gate_y.begin(), vertical_gate_y.end(), row) != vertical_gate_y.end())
+        return 'L';
+    if (col == width - 1 && std::find(vertical_gate_y.begin(), vertical_gate_y.end(), row) != vertical_gate_y.end())
+        return 'R';
     if (board[row][col].has_obstacle)
         return 'X';
     if (board[row][col].has_food)
