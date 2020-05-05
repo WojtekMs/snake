@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
+#include <array>
 
 template<typename T>
 class Array
@@ -61,4 +62,5 @@ public:
     }
 
 };
+
 #endif /* ARRAY2D_H_ */
