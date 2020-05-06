@@ -2,33 +2,26 @@
 #include <algorithm>
 #include <list>
 #include <iterator>
+#include <vector>
 
 Snake::Snake(SnakeBoard &board)
     : length(3),
-      body(5),
+      body(),
       s_board(board)
-    //   head(&body[0]),
-    //   tail(&body[length - 1])
 {
-    // body[0].x = length;
-    // body[0].y = 1;
-    // body[0].id = 0;
-    // for (int i = 1; i < length; ++i) {
-    //     body[i].x = body[0].x - i;
-    //     body[i].y = body[0].y;
-    //     body[i].id = i;
-    // }
-    body.front().x = length;
-    body.front().y = 1;
-    // body.front().id = 0;
-    for (int i = 1; i < length; ++i){
+    for (int i = 0; i < length; ++i){
         body.push_back(SnakePiece(length - i, 1));
     }
 
     current_dir = Direction::RIGHT;
     current_game_state = GameState::RUNNING;
     speed = 1;
-    move_count = 0;
+}
+
+bool Snake::SnakePiece::operator==(const Snake::SnakePiece & sp) const {
+    if (sp.x == this->x && sp.y == this->y)
+        return true;
+    return false;
 }
 
 void Snake::change_direction(Direction dir)
@@ -81,23 +74,22 @@ void Snake::display_dir() const
 
 void Snake::move()
 {
-    move_count++;
     SnakePiece new_element;
     if (current_dir == Direction::RIGHT) {
-        new_element.x = head->x + 1;
-        new_element.y = head->y;
+        new_element.x = body.front().x + 1;
+        new_element.y = body.front().y;
     }
     if (current_dir == Direction::DOWN) {
-        new_element.x = head->x;
-        new_element.y = head->y + 1;
+        new_element.x = body.front().x;
+        new_element.y = body.front().y + 1;
     }
     if (current_dir == Direction::LEFT) {
-        new_element.x = head->x - 1;
-        new_element.y = head->y;
+        new_element.x = body.front().x - 1;
+        new_element.y = body.front().y;
     }
     if (current_dir == Direction::UP) {
-        new_element.x = head->x;
-        new_element.y = head->y - 1;
+        new_element.x = body.front().x;
+        new_element.y = body.front().y - 1;
     }
     switch (s_board.get_tile_info(new_element.x, new_element.y)) {
     case 'T':
@@ -113,22 +105,10 @@ void Snake::move()
         new_element.x = 0;
     }
     body.push_front(new_element);
-    // head = tail;
-    // if (move_count % length != 0) {
-    //     tail = &body[get_snake_piece_idx(tail->id - 1)];
-    // } else {
-    //     move_count = 0;
-    //     tail = &body[get_snake_piece_idx(length - 1)];
-    // }
-
+    body.pop_back();
+    
     if (s_board.get_tile_info(body.front().x, body.front().y) == 'X')
         current_game_state = GameState::FINISHED_LOSS;
-    // int head_idx = get_snake_piece_idx(head->id);
-    // for (int i = 0; i < length; ++i) {
-    //     if (i != head_idx && head->x == body[i].x && head->y == body[i].y) {
-    //         current_game_state = GameState::FINISHED_LOSS;
-    //     }
-    // }
     if (std::find(std::next(body.begin(), 1), body.end(), SnakePiece(body.front().x, body.front().y) ) != body.end() ) {
         current_game_state = GameState::FINISHED_LOSS;
     }
@@ -142,45 +122,8 @@ bool Snake::contains(int col, int row) const
     return false; 
 }
 
-// int Snake::get_snake_piece_idx(int col, int row) const
-// {
-//     for (int i = 0; i < length; ++i) {
-//         if (body[i].x == col && body[i].y == row)
-//             return i;
-//     }
-//     return -1;
-// }
-
-// int Snake::get_snake_piece_idx(int id) const
-// {
-//     for (int i = 0; i < body.size(); ++i) {
-//         if (body[i].id == id)
-//             return i;
-//     }
-// }
-
-// int Snake::sort_by_ids()
-// {
-//     int element_id = 0;
-//     int j = 0;
-//     std::vector<std::pair<int, int>> indices_and_ids;
-//     for (int i = 0; i < body.size(); ++i) {
-//         if (i < length - move_count) {
-//             element_id = length - 1 - move_count - i;
-//         } else {
-//             element_id = length - 1 - j;
-//             j++;
-//         }
-//         indices_and_ids.push_back(std::pair<int, int>(get_snake_piece_idx(element_id), length - 1 - i));
-//     }
-//     for (int i = 0; i < body.size(); ++i) {
-//         body[indices_and_ids[i].first].id = indices_and_ids[i].second;
-//     }
-// }
-
 void Snake::grow()
 {
-    // sort_by_ids();
     SnakePiece new_one;
     std::list<SnakePiece>::iterator last = std::next(body.end(), - 1);
     std::list<SnakePiece>::iterator after_last = std::next(body.end(), - 2); 
@@ -207,11 +150,7 @@ void Snake::grow()
         new_one.y = valid.second;
     }
     length++;
-    // new_one.id = length - 1;
     body.push_back(new_one);
-    // tail = &body[get_snake_piece_idx(length - 1)];
-    // head = &body[get_snake_piece_idx(0)];
-    // move_count = 0;
 }
 
 std::pair<int, int> Snake::get_valid(int x, int y)

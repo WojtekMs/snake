@@ -36,7 +36,7 @@ void snake_tests(Snake &snake, const Debug_view &view)
     snake.change_direction(Direction::LEFT);
     snake.move();
     snake.move();
-    // snake.move();
+    snake.move();
     view.display();
     // snake.grow();
     // snake.grow();
@@ -45,12 +45,12 @@ void snake_tests(Snake &snake, const Debug_view &view)
     // snake.move();
     // snake.move();
     // snake.move();
-    // snake.change_direction(Direction::LEFT);
+    snake.change_direction(Direction::LEFT);
+    snake.move();
+    snake.move();
     // snake.move();
     // snake.move();
-    // snake.move();
-    // snake.move();
-    // view.display();
+    view.display();
     // snake.grow();
     // view.display();
     // snake.move();

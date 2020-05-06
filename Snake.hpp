@@ -3,6 +3,8 @@
 #include "SnakeBoard.hpp"
 #include <vector>
 #include <list>
+#include <algorithm>
+#include <iterator>
 
 enum Direction
 {
@@ -28,20 +30,13 @@ class Snake
         public:
         int x;
         int y;
-        // int id; //used to sort snake elements
         explicit SnakePiece(int x = 0, int y = 0): x(x), y(y) {};
-        // SnakePiece() {x = 0; y = 0;};
+        bool operator==(const SnakePiece &sp) const;
     };
-    // std::vector<SnakePiece> body;
-    
     std::list<Snake::SnakePiece> body;
-
     SnakeBoard &s_board;
-    SnakePiece * head, * tail;
 
     int speed; //measured in tiles per second
-    int move_count;
-    
     GameState current_game_state;
     Direction current_dir;
 
@@ -52,11 +47,6 @@ public:
     explicit Snake(SnakeBoard &board);
     void move();
     void change_direction(Direction dir);
-    // int get_snake_piece_x(int idx) const { return body[idx].x; };
-    // int get_snake_piece_y(int idx) const { return body[idx].y; };
-    // int get_snake_piece_id(int idx) const { return body[idx].id; };
-    // int get_snake_piece_idx(int x, int y) const;
-    // int get_snake_piece_idx(int id) const;
     Direction get_current_dir() const { return current_dir; };
     int get_length() const { return length; };
     void display_dir() const;
