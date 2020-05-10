@@ -14,14 +14,13 @@ class ModeSelection :public cScreen
     sf::Text easy_mode;
     sf::Text normal_mode;
     sf::Text hard_mode;
-    // sf::Text text;
+    sf::Text text;
+    sf::Text nickname_entered;
+    sf::RectangleShape text_box;
     int choice;
-    enum option {EASY, NORMAL, HARD};
     public:
     ModeSelection(SnakeBoard & b, Snake & s);
     virtual int Run(sf::RenderWindow &window);
-    GameMode get_mode() { return GameMode(choice); };
-    // void set_menu_state(menu_state state) { current_menu_state}
 
 };
 

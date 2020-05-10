@@ -10,7 +10,7 @@
 #include "SnakeBoard.hpp"
 #include "Snake.hpp"
 
-enum menu_state {FIRST, MODE_SELECTION, MODE_CHOSEN, STARTED};
+enum menu_state {FIRST, STARTED};
 enum option {CONTINUE, NEW_GAME, RANKING, EXIT};
 
 class MainMenu : public cScreen
@@ -31,9 +31,6 @@ class MainMenu : public cScreen
 public:
     MainMenu(SnakeBoard & b, Snake & s);
     virtual int Run(sf::RenderWindow &window);
-    option get_option() { return current_option; };
-    menu_state get_menu_state() { return current_menu_state; };
-    // friend void ModeSelection::set_menu_state(menu_state state);
 };
 
 

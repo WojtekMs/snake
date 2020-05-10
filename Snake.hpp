@@ -63,6 +63,7 @@ public:
     void update(sf::Time time_elapsed);
     Snake & operator=(const Snake & rhs);
     void set_name(const std::string & n) { name = n; };
+    const std::string & get_name() { return name; };
 
     
 };

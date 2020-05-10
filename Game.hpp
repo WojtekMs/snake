@@ -2,7 +2,6 @@
 #define SFMLVIEW_H_
 #include "SnakeBoard.hpp"
 #include "Snake.hpp"
-#include "SFMLController.hpp"
 #include <SFML/Graphics.hpp>
 #include "cScreen.hpp"
 

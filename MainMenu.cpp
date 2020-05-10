@@ -46,14 +46,12 @@ int MainMenu::Run(sf::RenderWindow &window)
                     choice--;
                     choice = (current_menu_state == menu_state::FIRST && choice < 1) ? 3 : choice;
                     choice = (current_menu_state == menu_state::STARTED && choice < 0) ? 3 : choice;
-                    // choice = (choice < 1) ? 3 : choice;
                     current_option = option(choice);
                 }
                 if (event.key.code == sf::Keyboard::Down) {
                     choice++;
                     choice = (current_menu_state == menu_state::FIRST && choice > 3) ? 1 : choice;
                     choice = (current_menu_state == menu_state::STARTED && choice > 3) ? 0 : choice;
-                    // choice = (choice > 3) ? 1 : choice;
                     current_option = option(choice);
                 }
                 if (event.key.code == sf::Keyboard::Return) { //enter key
@@ -62,7 +60,6 @@ int MainMenu::Run(sf::RenderWindow &window)
                     }
                     if (current_option == option::NEW_GAME) {
                         current_menu_state = menu_state::STARTED;
-                        // std::cout << "\n enter catched in new game main menu option \n";
                         return 1; //go to mode_selection
                     }
                     if (current_option == option::RANKING) {

@@ -7,11 +7,13 @@
 
 #include "cScreen.hpp"
 #include <SFML/Graphics.hpp>
+#include "SnakeBoard.hpp"
+#include "Snake.hpp"
 
 class Ranking : public cScreen
 {
     public:
-    Ranking();
+    Ranking(SnakeBoard &b, Snake & s);
     virtual int Run(sf::RenderWindow &window);
 
 };
