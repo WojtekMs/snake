@@ -1,13 +1,14 @@
-#include "SFMLView.hpp"
+#include "Game.hpp"
 #include "Snake.hpp"
 #include "SnakeBoard.hpp"
 #include <SFML/Graphics.hpp>
 #include <cerrno>
 #include <cstring>
 
-SFMLView::SFMLView(SnakeBoard &board, Snake &snake)
+Game::Game(SnakeBoard &board, Snake &snake)
     : view_board(board),
       view_snake(snake),
+    //   game_ctrl(board, snake),
       window_width(view_board.get_width() * field_size),
       window_height(view_board.get_height() * field_size)
 {
@@ -43,7 +44,7 @@ SFMLView::SFMLView(SnakeBoard &board, Snake &snake)
     snake_head_sprite.setTexture(snake_head_texture);
 }
 
-void SFMLView::display(sf::RenderWindow &window)
+void Game::draw(sf::RenderWindow &window)
 {
     for (int row = 0; row < view_board.get_height(); ++row) {
         for (int col = 0; col < view_board.get_width(); ++col) {
@@ -74,3 +75,84 @@ void SFMLView::display(sf::RenderWindow &window)
         }
     }
 }
+
+int Game::Run(sf::RenderWindow & window)
+{
+    sf::Clock clock;
+    while(true) {
+        sf::Event event;
+        while(window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                return -1;
+            }
+            if (event.key.code == sf::Keyboard::Escape) {
+                return 0;
+            }
+            handle_events(event);
+        }
+        window.clear();
+        view_snake.update(clock.restart());
+        draw(window);
+        window.display();
+
+    }
+}
+
+void Game::handle_events(sf::Event &event)
+{
+     if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::Left) {
+            view_snake.turn(Direction::LEFT);
+        }
+        if (event.key.code == sf::Keyboard::Right) {
+            view_snake.turn(Direction::RIGHT);
+        }
+    }
+
+}
+
+Game::Game(const Game & rhs)
+:view_board(rhs.view_board),
+view_snake(rhs.view_snake),
+field_size(rhs.field_size),
+window_width(rhs.window_width),
+window_height(rhs.window_height)
+{
+    wall_sprite = rhs.wall_sprite;
+    grass_sprite = rhs.grass_sprite;
+    food_sprite = rhs.food_sprite;
+    snake_body_sprite = rhs.snake_body_sprite;
+    snake_head_sprite = rhs.snake_head_sprite;
+    grass_texture = rhs.grass_texture;
+    wall_texture = rhs.wall_texture;
+    food_texture = rhs.food_texture;
+    snake_body_texture = rhs.snake_body_texture;
+    snake_head_texture = rhs.snake_head_texture;
+    font = rhs.font;
+    text = rhs.text;
+}
+
+Game & Game::operator=(const Game & rhs)
+{
+    if (this == &rhs) {
+        return *this;
+    }
+    view_board = rhs.view_board;
+    view_snake = rhs.view_snake;
+    field_size = rhs.field_size;
+    wall_sprite = rhs.wall_sprite;
+    grass_sprite = rhs.grass_sprite;
+    food_sprite = rhs.food_sprite;
+    snake_body_sprite = rhs.snake_body_sprite;
+    snake_head_sprite = rhs.snake_head_sprite;
+    grass_texture = rhs.grass_texture;
+    wall_texture = rhs.wall_texture;
+    food_texture = rhs.food_texture;
+    snake_body_texture = rhs.snake_body_texture;
+    snake_head_texture = rhs.snake_head_texture;
+    font = rhs.font;
+    text = rhs.text;
+    return *this;
+
+}
+

@@ -57,6 +57,14 @@
         "mutex": "cpp",
         "thread": "cpp",
         "variant": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "cassert": "cpp",
+        "cerrno": "cpp",
+        "cfloat": "cpp",
+        "ciso646": "cpp",
+        "ios": "cpp",
+        "locale": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     }
 }

@@ -3,7 +3,6 @@
 #include "Array2D.h"
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "SFMLView.hpp"
 #include "Snake.hpp"
 
 enum GameMode
@@ -34,6 +33,7 @@ public:
     GameMode get_current_game_mode() const { return current_game_mode; };
     int get_food_x() { return food_x; };
     int get_food_y() { return food_y; };
+    void set_game_mode(GameMode mode) { current_game_mode = mode; };
 };
 
 #endif

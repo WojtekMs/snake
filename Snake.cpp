@@ -8,7 +8,8 @@
 Snake::Snake(SnakeBoard &board)
     : length(3),
       body(),
-      s_board(board)
+      s_board(board),
+      name("brak")
 {
     for (int i = 0; i < length; ++i) {
         body.push_back(SnakePiece(length - i, 1));
@@ -17,6 +18,7 @@ Snake::Snake(SnakeBoard &board)
     current_dir = Direction::RIGHT;
     current_game_state = GameState::RUNNING;
     moved_after_turn = true;
+    game_points = 0;
     switch (s_board.get_current_game_mode()) {
     case GameMode::EASY: {
         speed = 1.5;
@@ -197,6 +199,7 @@ std::pair<int, int> Snake::get_valid(int x, int y)
         return std::pair<int, int>(x - 1, y + 1);
     if (s_board.get_tile_info(x + 1, y + 1) == ' ')
         return std::pair<int, int>(x + 1, y + 1);
+    return std::pair<int, int>(-1, -1);
 }
 
 void Snake::update(sf::Time time_elapsed)
@@ -205,17 +208,29 @@ void Snake::update(sf::Time time_elapsed)
     total_time += time_elapsed;
 
     float time = 1/speed;
-    std::cout << "speed " << speed << std::endl;
-    std::cout << "time " << time << std::endl;
-    std::cout << total_time.asSeconds() << std::endl;
-    // static sf::Clock timer;
     if (total_time.asSeconds() >= time) {
-        std::cout << "im inside\n";
         move();
         total_time = sf::Time();
     }
     if (body.front().x == s_board.get_food_x() && body.front().y == s_board.get_food_y()) {
         grow();
         s_board.draw_food();
+        game_points += 10;
     }
+}
+
+Snake & Snake::operator=(const Snake & rhs)
+{
+    if (this == &rhs) {
+        return *this;
+    }
+    length = rhs.length;
+    body = rhs.body;
+    s_board = rhs.s_board;
+    speed = rhs.speed;
+    delta_speed = rhs.delta_speed;
+    moved_after_turn = rhs.moved_after_turn;
+    current_game_state = rhs.current_game_state;
+    current_dir = rhs.current_dir;
+    return *this;
 }
