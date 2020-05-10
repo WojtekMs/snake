@@ -1,6 +1,6 @@
 #include "SnakeBoard.hpp"
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
 void SnakeBoard::set_size(int h, int w)
 {
@@ -27,17 +27,15 @@ void SnakeBoard::set_board_obstacles()
         }
     }
 
-    int horizontal_g_size = (int((width - 2) * 0.2069 + 0.5));   
-    for (int i = 0; i < horizontal_g_size; ++i)
-    {
+    int horizontal_g_size = (int((width - 2) * 0.2069 + 0.5));
+    for (int i = 0; i < horizontal_g_size; ++i) {
         board_obstacles[0][(width - horizontal_g_size) / 2 + i] = false;
         board_obstacles[height - 1][(width - horizontal_g_size) / 2 + i] = false;
         horizontal_gate_x.push_back((width - horizontal_g_size) / 2 + i);
     }
 
     int vertical_g_size = (int((height - 2) * 0.2222 + 0.5));
-    for (int i = 0; i < vertical_g_size; ++i)
-    {
+    for (int i = 0; i < vertical_g_size; ++i) {
         board_obstacles[(height - vertical_g_size) / 2 + i][0] = false;
         board_obstacles[(height - vertical_g_size) / 2 + i][width - 1] = false;
         vertical_gate_y.push_back((height - vertical_g_size) / 2 + i);
@@ -46,14 +44,14 @@ void SnakeBoard::set_board_obstacles()
     if (current_game_mode == GameMode::NORMAL || current_game_mode == GameMode::HARD) {
         int obstacle_1_size = int(height * 0.6 + 0.5); // |     |
         int distance_between_obstacles_1 = width * 0.6;
-        if (distance_between_obstacles_1 % 2 == 0){
+        if (distance_between_obstacles_1 % 2 == 0) {
             distance_between_obstacles_1 += 1;
         }
         int obstacle_1_left_horizontal_indent = (width - 4 - distance_between_obstacles_1) / 2;
         int obstacle_1_right_horizontal_indent = obstacle_1_left_horizontal_indent;
         if (obstacle_1_left_horizontal_indent % 2 != 0) {
             obstacle_1_right_horizontal_indent = obstacle_1_left_horizontal_indent + 1;
-        } 
+        }
         int obstacle_1_vertical_indent = (height - obstacle_1_size) / 2;
         for (int i = 0; i < obstacle_1_size; ++i) {
             board_obstacles[i + obstacle_1_vertical_indent][obstacle_1_left_horizontal_indent + 1] = true;
@@ -70,10 +68,10 @@ void SnakeBoard::set_board_obstacles()
             board_obstacles[height / 2 - 1][width - 2 - obstacle_1_right_horizontal_indent - obstacle_2_outer_denting - 1 - i] = true;
         }
 
-        if (current_game_mode == GameMode::HARD) { // x x x x x 
+        if (current_game_mode == GameMode::HARD) { // x x x x x
             for (int i = 0; i < distance_between_obstacles_1 / 2 + 1; ++i) {
-                    board_obstacles[obstacle_1_vertical_indent - 1][2 * i + obstacle_1_left_horizontal_indent + 2] = true;
-                    board_obstacles[obstacle_1_vertical_indent + obstacle_1_size][2 * i + obstacle_1_left_horizontal_indent + 2] = true;
+                board_obstacles[obstacle_1_vertical_indent][2 * i + obstacle_1_left_horizontal_indent + 2] = true;
+                board_obstacles[obstacle_1_vertical_indent + obstacle_1_size - 1][2 * i + obstacle_1_left_horizontal_indent + 2] = true;
             }
         }
     }
@@ -92,9 +90,19 @@ void SnakeBoard::draw_food()
 
 bool SnakeBoard::out_of_range(int col, int row) const
 {
-    if (col < 0 || col > width)
+    if (col == 0 || col == width - 1) {
+        if (std::find(vertical_gate_y.begin(), vertical_gate_y.end(), row) != vertical_gate_y.end()) {
+            return false;
+        }
+    }
+    if (row == 0 || row == height - 1) {
+        if (std::find(horizontal_gate_x.begin(), horizontal_gate_x.end(), col) != horizontal_gate_x.end()) {
+            return false;
+        }
+    }
+    if (col < 0 || col > width - 1)
         return true;
-    if (row < 0 || row > height)
+    if (row < 0 || row > height - 1)
         return true;
     return false;
 }
@@ -116,6 +124,10 @@ char SnakeBoard::get_tile_info(int col, int row) const
 {
     if (out_of_range(col, row))
         return '#';
+    if (col == food_x && row == food_y)
+        return 'F';
+    if (board_obstacles[row][col])
+        return 'X';
     if (row == 0 && std::find(horizontal_gate_x.begin(), horizontal_gate_x.end(), col) != horizontal_gate_x.end())
         return 'T';
     if (row == height - 1 && std::find(horizontal_gate_x.begin(), horizontal_gate_x.end(), col) != horizontal_gate_x.end())
@@ -124,9 +136,6 @@ char SnakeBoard::get_tile_info(int col, int row) const
         return 'L';
     if (col == width - 1 && std::find(vertical_gate_y.begin(), vertical_gate_y.end(), row) != vertical_gate_y.end())
         return 'R';
-    if (board_obstacles[row][col])
-        return 'X';
-    if (col == food_x && row == food_y)
-        return 'F';
+
     return ' ';
 }

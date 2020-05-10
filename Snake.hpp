@@ -1,10 +1,10 @@
 #ifndef SNAKE_HPP_
 #define SNAKE_HPP_
-#include "SnakeBoard.hpp"
 #include <vector>
 #include <list>
 #include <algorithm>
 #include <iterator>
+#include <SFML/Graphics.hpp>
 
 enum Direction
 {
@@ -20,8 +20,7 @@ enum GameState
     FINISHED_LOSS,
 };
 
-  
-
+class SnakeBoard;
 class Snake
 {
     int length;
@@ -36,23 +35,29 @@ class Snake
     std::list<Snake::SnakePiece> body;
     SnakeBoard &s_board;
 
-    int speed; //measured in tiles per second
+    float speed; //measured in field per second
+    float delta_speed; //the increase of speed after eating food
+    bool moved_after_turn;
     GameState current_game_state;
     Direction current_dir;
 
     std::pair<int, int> get_valid(int x, int y);
     int sort_by_ids();
+    void move();
+    void grow();
 
 public:
     explicit Snake(SnakeBoard &board);
-    void move();
-    void change_direction(Direction dir);
+    void turn(Direction dir);
     Direction get_current_dir() const { return current_dir; };
     int get_length() const { return length; };
     void display_dir() const;
-    void grow();
     bool contains(int col, int row) const;
     GameState get_game_state() const { return current_game_state; };
+    const SnakePiece & get_head() const { return body.front(); };
+    float get_speed() const { return speed; };
+    float get_delta_speed() const { return delta_speed; };
+    void update(sf::Time time_elapsed);
 
     
 };

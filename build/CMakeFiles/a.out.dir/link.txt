@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/a.out.dir/main.cpp.o CMakeFiles/a.out.dir/SnakeBoard.cpp.o CMakeFiles/a.out.dir/Snake.cpp.o CMakeFiles/a.out.dir/Debug_view.cpp.o CMakeFiles/a.out.dir/SFMLView.cpp.o CMakeFiles/a.out.dir/SFMLController.cpp.o CMakeFiles/a.out.dir/tests.cpp.o  -o ../a.out -lsfml-system -lsfml-window -lsfml-graphics -lsfml-audio 
