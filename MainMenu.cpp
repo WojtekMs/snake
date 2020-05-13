@@ -60,6 +60,7 @@ int MainMenu::Run(sf::RenderWindow &window)
                     }
                     if (current_option == option::NEW_GAME) {
                         current_menu_state = menu_state::STARTED;
+                        // snake.save_score();
                         return 1; //go to mode_selection
                     }
                     if (current_option == option::RANKING) {

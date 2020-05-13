@@ -34,6 +34,7 @@ public:
     int get_food_x() { return food_x; };
     int get_food_y() { return food_y; };
     void set_game_mode(GameMode mode) { current_game_mode = mode; };
+    std::string get_string_game_mode() const;
 };
 
 #endif

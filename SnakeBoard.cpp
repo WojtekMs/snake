@@ -139,3 +139,16 @@ char SnakeBoard::get_tile_info(int col, int row) const
 
     return ' ';
 }
+
+std::string SnakeBoard::get_string_game_mode() const {
+    if(current_game_mode == GameMode::EASY) {
+        return "EASY";
+    }
+    if (current_game_mode == GameMode::NORMAL) {
+        return "NORMAL";
+    }
+    if (current_game_mode == GameMode::HARD) {
+        return "HARD";
+    }
+    return "error";
+}

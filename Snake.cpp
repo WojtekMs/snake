@@ -1,15 +1,21 @@
 #include "Snake.hpp"
+#include "Ranking.hpp"
 #include "SnakeBoard.hpp"
 #include <algorithm>
+#include <climits>
+#include <fstream>
 #include <iterator>
 #include <list>
 #include <vector>
+
+// #include <ios>
 
 Snake::Snake(SnakeBoard &board)
     : length(3),
       body(),
       s_board(board),
-      name("brak")
+      name("brak"),
+      fname("scores.dat")
 {
     for (int i = 0; i < length; ++i) {
         body.push_back(SnakePiece(length - i, 1));
@@ -18,7 +24,8 @@ Snake::Snake(SnakeBoard &board)
     current_dir = Direction::RIGHT;
     current_game_state = GameState::RUNNING;
     moved_after_turn = true;
-    game_points = 0;
+    player_score = 10;
+    saved = false;
     switch (s_board.get_current_game_mode()) {
     case GameMode::EASY: {
         speed = 1.5;
@@ -207,7 +214,7 @@ void Snake::update(sf::Time time_elapsed)
     static sf::Time total_time;
     total_time += time_elapsed;
 
-    float time = 1/speed;
+    float time = 1 / speed;
     if (total_time.asSeconds() >= time) {
         move();
         total_time = sf::Time();
@@ -215,11 +222,14 @@ void Snake::update(sf::Time time_elapsed)
     if (body.front().x == s_board.get_food_x() && body.front().y == s_board.get_food_y()) {
         grow();
         s_board.draw_food();
-        game_points += 10;
+        player_score += 10;
+    }
+    if (saved == false && current_game_state == GameState::FINISHED_LOSS) {
+        save_score();
     }
 }
 
-Snake & Snake::operator=(const Snake & rhs)
+Snake &Snake::operator=(const Snake &rhs)
 {
     if (this == &rhs) {
         return *this;
@@ -232,5 +242,87 @@ Snake & Snake::operator=(const Snake & rhs)
     moved_after_turn = rhs.moved_after_turn;
     current_game_state = rhs.current_game_state;
     current_dir = rhs.current_dir;
+    saved = rhs.saved;
+    name = rhs.name;
+    player_score = rhs.player_score;
+    fname = rhs.fname;
     return *this;
+}
+
+void Snake::save_score()
+{
+    init_file();
+    int score_count = 0;   
+    std::fstream scores(fname, std::ios::out | std::ios::in);
+    scores.read((char *)&score_count, sizeof(score_count));
+    player_data p_data;
+    std::strcpy(p_data.name, name.c_str());
+    std::strcpy(p_data.mode, s_board.get_string_game_mode().c_str());
+    p_data.score = player_score;
+    int least_score = INT_MAX;
+    int least_score_id = 0;
+    int iterations = 0;
+    if (score_count >= max_score_count) {
+        while (scores.read((char *)&p_data, sizeof(p_data))) {
+            if (p_data.score < least_score) {
+                least_score = p_data.score;
+                least_score_id = iterations;
+            }
+            iterations++;
+        };
+        scores.clear();
+        if (player_score > least_score) {
+            std::streampos pos = least_score_id * sizeof(p_data) + sizeof(score_count);
+            scores.seekp(pos);
+            std::strcpy(p_data.name, name.c_str());
+            std::strcpy(p_data.mode, s_board.get_string_game_mode().c_str());
+            p_data.score = player_score;
+            scores.write((char *)&p_data, sizeof(p_data));
+        }
+    } else {
+        scores.seekp(0, std::ios_base::end);
+        scores.write((char *)&p_data, sizeof(p_data));
+        score_count++;
+        scores.seekp(0);
+        scores.write((char *)&score_count, sizeof(score_count));
+    }
+    scores.close();
+    saved = true;
+}
+    
+
+
+  
+
+void Snake::test_save(const std::string &fname)
+{
+    std::ifstream test(fname, std::ios::in);
+    if (!test.is_open()) {
+        std::cerr << "couldnt open file called " << fname;
+        abort();
+    }
+    int score_count;
+    player_data p_data;
+    test.seekg(0);
+    test.read((char *)&score_count, sizeof(score_count));
+    while (test.read((char *)&p_data, sizeof(p_data))) {
+        std::cout << "score count: " << score_count << "\n";
+        std::cout << "name: " << p_data.name << "\n";
+        std::cout << "mode: " << p_data.mode << "\n";
+        std::cout << "score: " << p_data.score << "\n";
+        // std::cout << "id: " << p_data.id << "\n";
+        std::cout << "------------------------------\n";
+    }
+}
+
+void Snake::init_file() const
+{   
+    std::ifstream test(fname);
+    int score_count = 0;
+    if (!test.is_open()) {
+        std::ofstream init(fname, std::ios::out);
+        init.write((char *)&score_count, sizeof(int));
+        init.close();
+    }
+    test.close();
 }

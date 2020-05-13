@@ -25,7 +25,7 @@ ModeSelection::ModeSelection(SnakeBoard &b, Snake &s)
 
     nickname_entered.setFillColor(sf::Color::Black);
 
-    text_box.setSize(sf::Vector2f(text.getCharacterSize() * 15 ,text.getLocalBounds().height + 10));
+    text_box.setSize(sf::Vector2f(text.getCharacterSize() * 15, text.getLocalBounds().height + 10));
     text_box.setFillColor(sf::Color::White);
     choice = 0;
 }
@@ -62,6 +62,7 @@ int ModeSelection::Run(sf::RenderWindow &window)
                 if (event.key.code == sf::Keyboard::Return) {
                     board = SnakeBoard(board.get_height(), board.get_width(), GameMode(choice));
                     snake = Snake(board);
+                    snake.set_name(nickname);
                     return 2; //game_screen
                 }
             }
@@ -71,9 +72,8 @@ int ModeSelection::Run(sf::RenderWindow &window)
                         nickname.pop_back();
                     } else {
                         nickname += event.text.unicode;
-                    }                    
+                    }
                 }
-                snake.set_name(nickname);
             }
         }
         easy_mode.setFillColor(sf::Color::White);

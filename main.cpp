@@ -7,6 +7,7 @@
 #include <array>
 #include <iostream>
 #include "Screens.hpp"
+#include "Ranking.hpp"
 
 int main()
 {
@@ -16,6 +17,8 @@ int main()
     // snake_tests(snake, view);
     // sfml_tests(sfml_view, sfml_ctrl, snake);
     screen_tests(board2, snake);
+    Ranking trial(board2, snake);
+    trial.load_highscore_list(snake.get_fname());
    
     
 }

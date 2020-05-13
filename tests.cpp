@@ -125,10 +125,6 @@ void screen_tests(SnakeBoard &board, Snake &snake)
     sf::RenderWindow window(sf::VideoMode(game.get_window_width(), game.get_window_height()), "screen tests");
 
     while (screen >= 0) {
-        // if (menu.get_option() == option::NEW_GAME &&  menu.get_menu_state() != menu_state::STARTED) {
-        //     game = Game(board, snake);
-        // }
         screen = screens[screen]->Run(window);
-        // if(screen == 2)
     }
 }
