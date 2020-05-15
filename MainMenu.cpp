@@ -34,8 +34,12 @@ int MainMenu::Run(sf::RenderWindow &window)
     text_ranking.setPosition(screen_x_center, screen_y_center);
     text_exit.setPosition(screen_x_center, screen_y_center + 2 * text_height);
     set_menu_state();
+    text_continue.setFillColor(sf::Color::White);
+    text_play.setFillColor(sf::Color::White);
+    text_ranking.setFillColor(sf::Color::White);
+    text_exit.setFillColor(sf::Color::White);
     choice = (current_menu_state == MainMenu::State::GAME_NOT_STARTED) ? 1 : 0;
-
+    current_option = Option(choice);
     while (true) {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
