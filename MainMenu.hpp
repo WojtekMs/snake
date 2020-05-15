@@ -5,22 +5,28 @@
 #include <cstring>
 #include <iostream>
 
+#include "Game.hpp"
+#include "Snake.hpp"
+#include "SnakeBoard.hpp"
 #include "cScreen.hpp"
 #include <SFML/Graphics.hpp>
-#include "SnakeBoard.hpp"
-#include "Snake.hpp"
-
-enum menu_state {FIRST, STARTED};
-enum option {CONTINUE, NEW_GAME, RANKING, EXIT};
 
 class MainMenu : public cScreen
 {
-    SnakeBoard & board;
-    Snake & snake;
-    bool running;
+public:
+    enum State { GAME_NOT_STARTED,
+                 GAME_STARTED };
+    enum Option { CONTINUE,
+                  NEW_GAME,
+                  RANKING,
+                  EXIT };
+
+private:
+    SnakeBoard &board;
+    Snake &snake;
     int choice;
-    option current_option;
-    menu_state current_menu_state;
+    State current_menu_state;
+    Option current_option;    
     sf::Event event;
     sf::Font font;
     sf::Text text_play;
@@ -28,10 +34,15 @@ class MainMenu : public cScreen
     sf::Text text_ranking;
     sf::Text text_exit;
 
-public:
-    MainMenu(SnakeBoard & b, Snake & s);
-    virtual int Run(sf::RenderWindow &window);
-};
+    void handle_events(sf::Event &event);
+    int chosen_screen();
+    void draw_options(sf::RenderWindow &window);
+    void set_menu_state();
 
+public:
+    MainMenu(SnakeBoard &b, Snake &s);
+    virtual int Run(sf::RenderWindow &window);
+    // friend void Game::handle_events(sf::Event &event);
+};
 
 #endif //MAINMENU_H_

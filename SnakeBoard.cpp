@@ -136,7 +136,6 @@ char SnakeBoard::get_tile_info(int col, int row) const
         return 'L';
     if (col == width - 1 && std::find(vertical_gate_y.begin(), vertical_gate_y.end(), row) != vertical_gate_y.end())
         return 'R';
-
     return ' ';
 }
 

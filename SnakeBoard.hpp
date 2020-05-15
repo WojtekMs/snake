@@ -1,18 +1,20 @@
 #ifndef SNAKEBOARD_H_
 #define SNAKEBOARD_H_
 #include "Array2D.h"
-#include <vector>
-#include <SFML/Graphics.hpp>
 #include "Snake.hpp"
+#include <SFML/Graphics.hpp>
+#include <vector>
 
-enum GameMode
-{
-    EASY,
-    NORMAL,
-    HARD
-};
 class SnakeBoard
 {
+public:
+    enum GameMode {
+        EASY,
+        NORMAL,
+        HARD
+    };
+
+private:
     int height, width;
     Array2D<char> board_obstacles; //boolean vector doesnt work properly
     std::vector<int> horizontal_gate_x, vertical_gate_y;

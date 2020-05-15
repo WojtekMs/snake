@@ -1,18 +1,17 @@
 #ifndef SFMLVIEW_H_
 #define SFMLVIEW_H_
-#include "SnakeBoard.hpp"
-#include "Snake.hpp"
+// #include "SnakeBoard.hpp"
+// #include "Snake.hpp"
 #include <SFML/Graphics.hpp>
 #include "cScreen.hpp"
 
-// class SnakeBoard;
-// class Snake;
-// enum GameScreenState {DISPLAYING, NOT_DISPLAYING};
+class Snake;
+class SnakeBoard;
 class Game : public cScreen
 {
+    // friend class MainMenu;
     SnakeBoard & view_board;
     Snake & view_snake;
-    // SFMLController game_ctrl;
     float field_size = 32;
     sf::Sprite wall_sprite;
     sf::Sprite grass_sprite;
@@ -26,10 +25,13 @@ class Game : public cScreen
     sf::Texture snake_head_texture;
     sf::Font font;
     sf::Text text;
+    sf::RectangleShape end_game_textbox;
+    sf::Clock clock;
+    sf::Time total_time;
     unsigned int window_width;
     unsigned int window_height;
-    // GameScreenState current_screen_state;
     void handle_events(sf::Event &event);
+    void draw_end_game_screen(sf::RenderWindow &window);
 
     public:
     Game(SnakeBoard & view, Snake & snake);
@@ -40,9 +42,6 @@ class Game : public cScreen
     virtual int Run(sf::RenderWindow & window);
     Game (const Game & rhs);
     Game & operator=(const Game & rhs);
-    // GameScreenState get_game_screen_state() { return current_screen_state; }
-
-
 };
 
 

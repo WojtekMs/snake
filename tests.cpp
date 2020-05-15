@@ -117,11 +117,12 @@ void screen_tests(SnakeBoard &board, Snake &snake)
     std::vector<cScreen *> screens;
     MainMenu menu(board, snake);
     ModeSelection mode_selec(board, snake);
+    Ranking ranking(board, snake);
     Game game(board, snake);
-    screens.push_back(&menu);
-    screens.push_back(&mode_selec);
-    //ranking
-    screens.push_back(&game);
+    screens.push_back(&menu); //0
+    screens.push_back(&mode_selec); //1
+    screens.push_back(&ranking); //2
+    screens.push_back(&game); //3
     sf::RenderWindow window(sf::VideoMode(game.get_window_width(), game.get_window_height()), "screen tests");
 
     while (screen >= 0) {

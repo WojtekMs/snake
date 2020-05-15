@@ -8,7 +8,6 @@
 #include <list>
 #include <vector>
 
-// #include <ios>
 
 Snake::Snake(SnakeBoard &board)
     : length(3),
@@ -20,26 +19,26 @@ Snake::Snake(SnakeBoard &board)
     for (int i = 0; i < length; ++i) {
         body.push_back(SnakePiece(length - i, 1));
     }
-
     current_dir = Direction::RIGHT;
-    current_game_state = GameState::RUNNING;
+    current_game_state = GameState::NOT_STARTED;
     moved_after_turn = true;
-    player_score = 10;
+    player_score = 0;
     saved = false;
     switch (s_board.get_current_game_mode()) {
-    case GameMode::EASY: {
+    case SnakeBoard::GameMode::EASY: {
         speed = 1.5;
         delta_speed = 0.3;
     } break;
-    case GameMode::NORMAL: {
+    case SnakeBoard::GameMode::NORMAL: {
         speed = 2;
         delta_speed = 0.4;
     } break;
-    case GameMode::HARD: {
+    case SnakeBoard::GameMode::HARD: {
         speed = 2.5;
         delta_speed = 0.5;
     } break;
     }
+    init_file();
 }
 
 bool Snake::SnakePiece::operator==(const Snake::SnakePiece &sp) const
@@ -87,19 +86,6 @@ void Snake::turn(Direction dir)
     moved_after_turn = false;
 }
 
-void Snake::display_dir() const
-{
-    if (current_dir == Direction::RIGHT)
-        std::cout << "current: right";
-    if (current_dir == Direction::DOWN)
-        std::cout << "current: down";
-    if (current_dir == Direction::LEFT)
-        std::cout << "current: left";
-    if (current_dir == Direction::UP)
-        std::cout << "current: up";
-    std::cout << "\n-------------------------\n";
-}
-
 void Snake::move()
 {
     if (current_game_state == GameState::FINISHED_LOSS)
@@ -126,19 +112,16 @@ void Snake::move()
         if (current_dir == Direction::UP) {
             new_element.y = s_board.get_height() - 1;
         }
-
         break;
     case 'B':
         if (current_dir == Direction::DOWN) {
             new_element.y = 0;
         }
-
         break;
     case 'L':
         if (current_dir == Direction::LEFT) {
             new_element.x = s_board.get_width() - 1;
         }
-
         break;
     case 'R':
         if (current_dir == Direction::RIGHT) {
@@ -211,6 +194,13 @@ std::pair<int, int> Snake::get_valid(int x, int y)
 
 void Snake::update(sf::Time time_elapsed)
 {
+    if (current_game_state == GameState::FINISHED_LOSS) {
+        if (saved == false) {
+            save_score();
+        }
+        return;
+            
+    }
     static sf::Time total_time;
     total_time += time_elapsed;
 
@@ -224,7 +214,7 @@ void Snake::update(sf::Time time_elapsed)
         s_board.draw_food();
         player_score += 10;
     }
-    if (saved == false && current_game_state == GameState::FINISHED_LOSS) {
+    if (current_game_state == GameState::FINISHED_LOSS) {
         save_score();
     }
 }
@@ -288,31 +278,6 @@ void Snake::save_score()
     }
     scores.close();
     saved = true;
-}
-    
-
-
-  
-
-void Snake::test_save(const std::string &fname)
-{
-    std::ifstream test(fname, std::ios::in);
-    if (!test.is_open()) {
-        std::cerr << "couldnt open file called " << fname;
-        abort();
-    }
-    int score_count;
-    player_data p_data;
-    test.seekg(0);
-    test.read((char *)&score_count, sizeof(score_count));
-    while (test.read((char *)&p_data, sizeof(p_data))) {
-        std::cout << "score count: " << score_count << "\n";
-        std::cout << "name: " << p_data.name << "\n";
-        std::cout << "mode: " << p_data.mode << "\n";
-        std::cout << "score: " << p_data.score << "\n";
-        // std::cout << "id: " << p_data.id << "\n";
-        std::cout << "------------------------------\n";
-    }
 }
 
 void Snake::init_file() const

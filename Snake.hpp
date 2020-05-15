@@ -6,23 +6,14 @@
 #include <list>
 #include <string>
 #include <vector>
+#include "Game.hpp"
 
-enum Direction {
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN
-};
-
-enum GameState {
-    RUNNING,
-    FINISHED_LOSS,
-};
 
 const int lim = 20;
-const int max_score_count = 4;
+const int max_score_count = 10;
 
 struct player_data {
+  
     char name[lim];
     char mode[lim];
     int score;
@@ -31,6 +22,22 @@ struct player_data {
 class SnakeBoard;
 class Snake
 {
+public:
+    friend int Game::Run(sf::RenderWindow &window);
+    enum Direction {
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN
+    };
+
+    enum GameState {
+        NOT_STARTED,
+        RUNNING,
+        FINISHED_LOSS,
+    };
+
+private:
     int length;
     class SnakePiece
     {
@@ -60,22 +67,22 @@ class Snake
 public:
     explicit Snake(SnakeBoard &board);
     void turn(Direction dir);
-    Direction get_current_dir() const { return current_dir; };
-    int get_length() const { return length; };
-    void display_dir() const;
     bool contains(int col, int row) const;
+    void update(sf::Time time_elapsed);
+    void set_name(const std::string &n) { name = n; };
+    Snake &operator=(const Snake &rhs);
+    
+    void save_score();
+    void init_file() const;
+    
     GameState get_game_state() const { return current_game_state; };
     const SnakePiece &get_head() const { return body.front(); };
     float get_speed() const { return speed; };
     float get_delta_speed() const { return delta_speed; };
-    void update(sf::Time time_elapsed);
-    Snake &operator=(const Snake &rhs);
-    void set_name(const std::string &n) { name = n; };
     const std::string &get_name() { return name; };
-    void save_score();
-    void init_file() const;
-    void test_save(const std::string & fname);
-    const std::string & get_fname() { return fname; };
+    const std::string &get_fname() { return fname; };
+    Direction get_current_dir() const { return current_dir; };
+    int get_length() const { return length; };
 };
 
 #endif
