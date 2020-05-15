@@ -1,33 +1,33 @@
 #include "Array2D.h"
 #include "Game.hpp"
+#include "Ranking.hpp"
+#include "Screens.hpp"
 #include "Snake.hpp"
 #include "SnakeBoard.hpp"
-#include "tests.hpp"
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <iostream>
-#include "Screens.hpp"
-#include "Ranking.hpp"
+
+
 
 int main()
 {
-    SnakeBoard board2(25, 40, SnakeBoard::GameMode::HARD);
-    Snake snake(board2);
-    Game sfml_view(board2, snake);
-    // snake_tests(snake, view);
-    // sfml_tests(sfml_view, sfml_ctrl, snake);
-    screen_tests(board2, snake);
-    Ranking trial(board2, snake);
-    snake.init_file();
-    trial.load_highscore_list(snake.get_fname());
+    int screen = 0;
+    sf::RenderWindow window(sf::VideoMode(), "Snake", sf::Style::Fullscreen);
+    window.setMouseCursorVisible(false);
+    std::vector<cScreen *> screens;
+    SnakeBoard board(window.getSize().y / Consts::field_size, window.getSize().x / Consts::field_size);
+    Snake snake(board);
+    MainMenu menu(board, snake);
+    ModeSelection mode_selec(board, snake);
+    Ranking ranking(board, snake);
+    Game game(board, snake);
+    screens.push_back(&menu); //0
+    screens.push_back(&mode_selec); //1
+    screens.push_back(&ranking); //2
+    screens.push_back(&game); //3
 
-    // std::vector<player_data> highscore_list;
-    // player_data p_data {"wojtek", "hard", 100};
-    // highscore_list.push_back(p_data);
-    // for (size_t i = 0; i < highscore_list.size() ; ++i) {
-    //     std::cout << i + 1 << ", " << highscore_list[i].name << ", " 
-    //     << highscore_list[i].mode << ", " << highscore_list[i].score << "\n";
-    // }
-   
-    
+    while (screen >= 0) {
+        screen = screens[screen]->Run(window);
+    }
 }

@@ -8,14 +8,17 @@
 #include <vector>
 #include "Game.hpp"
 
+namespace Consts {
+    const int lim = 20;
+    const int max_score_count = 10;
+    const int field_size = 32;
+}
 
-const int lim = 20;
-const int max_score_count = 10;
 
 struct player_data {
   
-    char name[lim];
-    char mode[lim];
+    char name[Consts::lim];
+    char mode[Consts::lim];
     int score;
 };
 

@@ -252,7 +252,7 @@ void Snake::save_score()
     int least_score = INT_MAX;
     int least_score_id = 0;
     int iterations = 0;
-    if (score_count >= max_score_count) {
+    if (score_count >= Consts::max_score_count) {
         while (scores.read((char *)&p_data, sizeof(p_data))) {
             if (p_data.score < least_score) {
                 least_score = p_data.score;
