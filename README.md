@@ -19,5 +19,11 @@ Just me :)
 ## Acknowledgements
 I watched and took inspiration in some of the Snake game versions showed in this video:
 [Evolution of Snake games](https://www.youtube.com/watch?v=JLioqhN626A)
+
 Textures used from this Snake game:
 [Snake game](https://github.com/shaswata56/Snake)
+
+Created with the help of SFML documentation and sources:
+[Manage different screens](https://github.com/SFML/SFML/wiki/Tutorial:-Manage-different-Screens)
+
+
