@@ -26,4 +26,10 @@ Textures used from this Snake game:
 Created with the help of SFML documentation and sources:
 [Manage different screens](https://github.com/SFML/SFML/wiki/Tutorial:-Manage-different-Screens)
 
+## Game Screen Shots
 
+- [Main menu](https://user-images.githubusercontent.com/62173407/82100569-3ac9eb00-970a-11ea-94a6-d7f4f235da8e.png)
+- [Mode selection](https://user-images.githubusercontent.com/62173407/82100590-4cab8e00-970a-11ea-85d0-a1ddfe06e39c.png)
+- [Game normal mode](https://user-images.githubusercontent.com/62173407/82100613-5e8d3100-970a-11ea-8c5e-edee800a5c7f.png)
+- [Lost](https://user-images.githubusercontent.com/62173407/82100616-6056f480-970a-11ea-80e5-8962f3735e64.png)
+- [Ranking](https://user-images.githubusercontent.com/62173407/82100618-6220b800-970a-11ea-88b0-20825d661150.png)
