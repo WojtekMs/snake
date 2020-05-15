@@ -16,7 +16,6 @@ public:
 
 private:
     int height, width;
-    // Array2D<char> board_obstacles; //boolean vector doesnt work properly
     Array2D<bool> board_obstacles;
     std::vector<int> horizontal_gate_x, vertical_gate_y;
     GameMode current_game_mode;
@@ -25,6 +24,8 @@ private:
 
     void set_size(int h, int w);
     void set_board_obstacles();
+    void set_normal_mode_obstacles();
+    void set_hard_mode_obstacles();
     void draw_food();
     bool out_of_range(int col, int row) const;
     friend void Snake::update(sf::Time time_elapsed);

@@ -42,38 +42,58 @@ void SnakeBoard::set_board_obstacles()
     }
 
     if (current_game_mode == GameMode::NORMAL || current_game_mode == GameMode::HARD) {
-        int obstacle_1_size = int(height * 0.6 + 0.5); // |     |
-        int distance_between_obstacles_1 = width * 0.6;
-        if (distance_between_obstacles_1 % 2 == 0) {
-            distance_between_obstacles_1 += 1;
-        }
-        int obstacle_1_left_horizontal_indent = (width - 4 - distance_between_obstacles_1) / 2;
-        int obstacle_1_right_horizontal_indent = obstacle_1_left_horizontal_indent;
-        if (obstacle_1_left_horizontal_indent % 2 != 0) {
-            obstacle_1_right_horizontal_indent = obstacle_1_left_horizontal_indent + 1;
-        }
-        int obstacle_1_vertical_indent = (height - obstacle_1_size) / 2;
-        for (int i = 0; i < obstacle_1_size; ++i) {
-            board_obstacles[i + obstacle_1_vertical_indent][obstacle_1_left_horizontal_indent + 1] = true;
-            board_obstacles[i + obstacle_1_vertical_indent][width - 2 - obstacle_1_right_horizontal_indent] = true;
-        }
-
-        int obstacle_2_outer_denting = distance_between_obstacles_1 / 2 * 0.1111; // ---  ---
-        obstacle_2_outer_denting = (obstacle_2_outer_denting < 1) ? 1 : obstacle_2_outer_denting;
-        int obstacle_2_inner_denting = distance_between_obstacles_1 / 2 * 0.2222;
-        obstacle_2_inner_denting = (obstacle_2_inner_denting < 2) ? 2 : obstacle_2_inner_denting;
-        int obstacle_2_size = (distance_between_obstacles_1 - 2 * obstacle_2_outer_denting - obstacle_2_inner_denting) / 2;
-        for (int i = 0; i < obstacle_2_size; ++i) {
-            board_obstacles[height / 2 - 1][i + obstacle_1_left_horizontal_indent + 1 + obstacle_2_outer_denting + 1] = true;
-            board_obstacles[height / 2 - 1][width - 2 - obstacle_1_right_horizontal_indent - obstacle_2_outer_denting - 1 - i] = true;
-        }
+        set_normal_mode_obstacles(); // | ---  --- |
 
         if (current_game_mode == GameMode::HARD) { // x x x x x
-            for (int i = 0; i < distance_between_obstacles_1 / 2 + 1; ++i) {
-                board_obstacles[obstacle_1_vertical_indent][2 * i + obstacle_1_left_horizontal_indent + 2] = true;
-                board_obstacles[obstacle_1_vertical_indent + obstacle_1_size - 1][2 * i + obstacle_1_left_horizontal_indent + 2] = true;
-            }
+            set_hard_mode_obstacles();
         }
+    }
+}
+
+void SnakeBoard::set_normal_mode_obstacles()
+{
+    int obstacle_1_size = int(height * 0.6 + 0.5); // |     |
+    int distance_between_obstacles_1 = width * 0.6;
+    if (distance_between_obstacles_1 % 2 == 0) {
+        distance_between_obstacles_1 += 1;
+    }
+    int obstacle_1_left_horizontal_indent = (width - 4 - distance_between_obstacles_1) / 2;
+    int obstacle_1_right_horizontal_indent = obstacle_1_left_horizontal_indent;
+    if (obstacle_1_left_horizontal_indent % 2 != 0) {
+        obstacle_1_right_horizontal_indent = obstacle_1_left_horizontal_indent + 1;
+    }
+    int obstacle_1_vertical_indent = (height - obstacle_1_size) / 2;
+
+    for (int i = 0; i < obstacle_1_size; ++i) {
+        board_obstacles[i + obstacle_1_vertical_indent][obstacle_1_left_horizontal_indent + 1] = true;
+        board_obstacles[i + obstacle_1_vertical_indent][width - 2 - obstacle_1_right_horizontal_indent] = true;
+    }
+
+    int obstacle_2_outer_denting = distance_between_obstacles_1 / 2 * 0.1111; // ---  ---
+    obstacle_2_outer_denting = (obstacle_2_outer_denting < 1) ? 1 : obstacle_2_outer_denting;
+    int obstacle_2_inner_denting = distance_between_obstacles_1 / 2 * 0.2222;
+    obstacle_2_inner_denting = (obstacle_2_inner_denting < 2) ? 2 : obstacle_2_inner_denting;
+    int obstacle_2_size = (distance_between_obstacles_1 - 2 * obstacle_2_outer_denting - obstacle_2_inner_denting) / 2;
+
+    for (int i = 0; i < obstacle_2_size; ++i) {
+        board_obstacles[height / 2 - 1][i + obstacle_1_left_horizontal_indent + 1 + obstacle_2_outer_denting + 1] = true;
+        board_obstacles[height / 2 - 1][width - 2 - obstacle_1_right_horizontal_indent - obstacle_2_outer_denting - 1 - i] = true;
+    }
+}
+
+void SnakeBoard::set_hard_mode_obstacles()
+{
+    int obstacle_1_size = int(height * 0.6 + 0.5); // x x x x x
+    int distance_between_obstacles_1 = width * 0.6;
+    if (distance_between_obstacles_1 % 2 == 0) {
+        distance_between_obstacles_1 += 1;
+    }
+    int obstacle_1_vertical_indent = (height - obstacle_1_size) / 2;
+    int obstacle_1_left_horizontal_indent = (width - 4 - distance_between_obstacles_1) / 2;
+
+    for (int i = 0; i < distance_between_obstacles_1 / 2 + 1; ++i) {
+        board_obstacles[obstacle_1_vertical_indent][2 * i + obstacle_1_left_horizontal_indent + 2] = true;
+        board_obstacles[obstacle_1_vertical_indent + obstacle_1_size - 1][2 * i + obstacle_1_left_horizontal_indent + 2] = true;
     }
 }
 
@@ -140,8 +160,9 @@ char SnakeBoard::get_tile_info(int col, int row) const
     return ' ';
 }
 
-std::string SnakeBoard::get_string_game_mode() const {
-    if(current_game_mode == GameMode::EASY) {
+std::string SnakeBoard::get_string_game_mode() const
+{
+    if (current_game_mode == GameMode::EASY) {
         return "EASY";
     }
     if (current_game_mode == GameMode::NORMAL) {

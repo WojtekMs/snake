@@ -42,7 +42,6 @@ private:
 public:
     MainMenu(SnakeBoard &b, Snake &s);
     virtual int Run(sf::RenderWindow &window);
-    // friend void Game::handle_events(sf::Event &event);
 };
 
 #endif //MAINMENU_H_

@@ -1,7 +1,5 @@
 #ifndef SFMLVIEW_H_
 #define SFMLVIEW_H_
-// #include "SnakeBoard.hpp"
-// #include "Snake.hpp"
 #include <SFML/Graphics.hpp>
 #include "cScreen.hpp"
 
@@ -9,7 +7,6 @@ class Snake;
 class SnakeBoard;
 class Game : public cScreen
 {
-    // friend class MainMenu;
     SnakeBoard & view_board;
     Snake & view_snake;
     float field_size = 32;
