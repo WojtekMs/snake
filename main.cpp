@@ -13,10 +13,8 @@
 
 int main()
 {
-    // int screen = 0;
     sf::RenderWindow window(sf::VideoMode(), "Snake", sf::Style::Fullscreen);
     window.setMouseCursorVisible(false);
-    // std::vector<cScreen *> screens;
     std::map<std::string, cScreen*> screens;
     SnakeBoard board(window.getSize().y / Consts::field_size, window.getSize().x / Consts::field_size);
     Snake snake(board);
@@ -24,10 +22,10 @@ int main()
     ModeSelection mode_selec(board, snake);
     Ranking ranking(board, snake);
     Game game(board, snake);
-    screens["menu"] = (&menu); //0
-    screens["mode selection"] = (&mode_selec); //1
-    screens["ranking"] = (&ranking); //2
-    screens["game"] = (&game); //3
+    screens["menu"] = (&menu);
+    screens["mode selection"] = (&mode_selec);
+    screens["ranking"] = (&ranking);
+    screens["game"] = (&game);
     std::string screen = "menu";
 
     while (screen != "exit") {
