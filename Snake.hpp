@@ -26,7 +26,7 @@ class SnakeBoard;
 class Snake
 {
 public:
-    friend int Game::Run(sf::RenderWindow &window);
+    friend std::string Game::Run(sf::RenderWindow &window);
     enum Direction {
         LEFT,
         RIGHT,

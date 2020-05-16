@@ -20,7 +20,6 @@ private:
     std::vector<int> horizontal_gate_x, vertical_gate_y;
     GameMode current_game_mode;
     int food_x, food_y;
-    int field_size;
 
     void set_size(int h, int w);
     void set_board_obstacles();
@@ -40,7 +39,6 @@ public:
     int get_food_y() { return food_y; };
     void set_game_mode(GameMode mode) { current_game_mode = mode; };
     std::string get_string_game_mode() const;
-    int get_field_size() { return field_size; };
 };
 
 #endif

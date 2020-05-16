@@ -51,17 +51,17 @@ Ranking::Ranking(SnakeBoard &b, Snake &s)
     choice = 0;
 }
 
-int Ranking::Run(sf::RenderWindow &window)
+std::string Ranking::Run(sf::RenderWindow &window)
 {
     load_highscore_list(snake.get_fname());
     set_table(window);
     while (true) {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                return -1;
+                return "exit";
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-                return 0; //main menu
+                return "menu";
             }
         }
         window.clear();
@@ -70,7 +70,7 @@ int Ranking::Run(sf::RenderWindow &window)
 
         window.display();
     }
-    return -1; //will never reach this point
+    return "exit";
 }
 
 void Ranking::draw(sf::RenderWindow &window)

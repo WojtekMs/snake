@@ -26,7 +26,7 @@ class ModeSelection :public cScreen
 
     public:
     ModeSelection(SnakeBoard & b, Snake & s);
-    virtual int Run(sf::RenderWindow &window);
+    virtual std::string Run(sf::RenderWindow &window);
 
 };
 

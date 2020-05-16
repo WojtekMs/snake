@@ -35,13 +35,13 @@ private:
     sf::Text text_exit;
 
     void handle_events(sf::Event &event);
-    int chosen_screen();
+    std::string chosen_screen();
     void draw_options(sf::RenderWindow &window);
     void set_menu_state();
 
 public:
     MainMenu(SnakeBoard &b, Snake &s);
-    virtual int Run(sf::RenderWindow &window);
+    virtual std::string Run(sf::RenderWindow &window);
 };
 
 #endif //MAINMENU_H_

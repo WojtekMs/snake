@@ -133,8 +133,7 @@ SnakeBoard::SnakeBoard(int h, int w, GameMode mode)
       board_obstacles(w, h),
       horizontal_gate_x(),
       vertical_gate_y(),
-      current_game_mode(mode),
-      field_size(32)
+      current_game_mode(mode)
 {
     set_size(h, w);
     set_board_obstacles();

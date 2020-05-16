@@ -7,27 +7,30 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <iostream>
+#include <map>
 
 
 
 int main()
 {
-    int screen = 0;
+    // int screen = 0;
     sf::RenderWindow window(sf::VideoMode(), "Snake", sf::Style::Fullscreen);
     window.setMouseCursorVisible(false);
-    std::vector<cScreen *> screens;
+    // std::vector<cScreen *> screens;
+    std::map<std::string, cScreen*> screens;
     SnakeBoard board(window.getSize().y / Consts::field_size, window.getSize().x / Consts::field_size);
     Snake snake(board);
     MainMenu menu(board, snake);
     ModeSelection mode_selec(board, snake);
     Ranking ranking(board, snake);
     Game game(board, snake);
-    screens.push_back(&menu); //0
-    screens.push_back(&mode_selec); //1
-    screens.push_back(&ranking); //2
-    screens.push_back(&game); //3
+    screens["menu"] = (&menu); //0
+    screens["mode selection"] = (&mode_selec); //1
+    screens["ranking"] = (&ranking); //2
+    screens["game"] = (&game); //3
+    std::string screen = "menu";
 
-    while (screen >= 0) {
+    while (screen != "exit") {
         screen = screens[screen]->Run(window);
     }
 }

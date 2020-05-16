@@ -21,7 +21,7 @@ MainMenu::MainMenu(SnakeBoard &b, Snake &s)
     text_exit.setString("Exit");
 }
 
-int MainMenu::Run(sf::RenderWindow &window)
+std::string MainMenu::Run(sf::RenderWindow &window)
 {
     const int screen_height = window.getSize().y;
     const int screen_width = window.getSize().x;
@@ -43,7 +43,7 @@ int MainMenu::Run(sf::RenderWindow &window)
     while (true) {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                return -1; //will exit the application in the main function
+                return "exit"; //will exit the application in the main function
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
                 return chosen_screen();
@@ -52,7 +52,7 @@ int MainMenu::Run(sf::RenderWindow &window)
         }
         draw_options(window);
     }
-    return -1; //normally never reaches this place
+    return "exit"; //normally never reaches this place
 }
 
 void MainMenu::set_menu_state() {
@@ -116,19 +116,19 @@ void MainMenu::handle_events(sf::Event &event)
     }
 }
 
-int MainMenu::chosen_screen()
+std::string MainMenu::chosen_screen()
 {
     if (current_option == Option::CONTINUE) {
-        return 3; //game screen
+        return "game"; 
     }
     if (current_option == Option::NEW_GAME) {
         if (snake.get_game_state() == Snake::GameState::RUNNING) {
             current_menu_state = MainMenu::State::GAME_STARTED;
         }
-        return 1; //go to mode_selection
+        return "mode selection"; 
     }
     if (current_option == Option::RANKING) {
-        return 2;
+        return "ranking";
     }
-    return -1; //exit
+    return "exit";
 }

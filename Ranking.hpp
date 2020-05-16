@@ -38,7 +38,7 @@ class Ranking : public cScreen
 
 public:
     Ranking(SnakeBoard &b, Snake &s);
-    virtual int Run(sf::RenderWindow &window);
+    virtual std::string Run(sf::RenderWindow &window);
     void load_highscore_list(const std::string &fname);
 };
 

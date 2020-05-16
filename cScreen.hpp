@@ -5,7 +5,7 @@
 class cScreen
 {
 public :
-    virtual int Run (sf::RenderWindow &App) = 0;
+    virtual std::string Run (sf::RenderWindow &App) = 0;
 };
 
 #endif //CSCREEN_H_

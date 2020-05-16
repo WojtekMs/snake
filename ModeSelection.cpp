@@ -31,7 +31,7 @@ ModeSelection::ModeSelection(SnakeBoard &b, Snake &s)
     choice = 0;
 }
 
-int ModeSelection::Run(sf::RenderWindow &window)
+std::string ModeSelection::Run(sf::RenderWindow &window)
 {
     const int text_height = easy_mode.getLocalBounds().height;
     const int text_width = easy_mode.getLocalBounds().width;
@@ -49,14 +49,14 @@ int ModeSelection::Run(sf::RenderWindow &window)
     while (true) {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                return -1;
+                return "exit";
             }
             if (nickname.length() > 0) {
                 if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
                     board = SnakeBoard(board.get_height(), board.get_width(), SnakeBoard::GameMode(choice));
                     snake = Snake(board);
                     snake.set_name(nickname);
-                    return 3; //game_screen
+                    return "game"; //game_screen
                 }
             }
             handle_events(event);

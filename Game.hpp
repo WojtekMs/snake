@@ -36,7 +36,7 @@ class Game : public cScreen
     unsigned int get_window_width() const { return window_width; };
     unsigned int get_window_height() const { return window_height; };
     void update(sf::Time time_elapsed);
-    virtual int Run(sf::RenderWindow & window);
+    virtual  std::string Run(sf::RenderWindow & window);
     Game (const Game & rhs);
     Game & operator=(const Game & rhs);
 };

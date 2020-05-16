@@ -99,7 +99,7 @@ void Game::draw_end_game_screen(sf::RenderWindow &window)
     window.draw(text);
 }
 
-int Game::Run(sf::RenderWindow &window)
+std::string Game::Run(sf::RenderWindow &window)
 {
     view_snake.current_game_state = Snake::GameState::RUNNING;
     total_time = sf::Time();
@@ -107,10 +107,10 @@ int Game::Run(sf::RenderWindow &window)
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                return -1;
+                return "exit";
             }
             if (event.key.code == sf::Keyboard::Escape) {
-                return 0;
+                return "menu";
             }
             handle_events(event);
         }
@@ -121,7 +121,7 @@ int Game::Run(sf::RenderWindow &window)
             draw_end_game_screen(window);
             total_time += clock.getElapsedTime();
             if (total_time.asSeconds() > 2.5) {
-                return 2; //ranking screen
+                return "ranking"; //ranking screen
             }
            
         }
