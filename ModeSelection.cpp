@@ -1,15 +1,15 @@
 #include "ModeSelection.hpp"
+
 #include "MainMenu.hpp"
+#include "config.hpp"
+
 #include <cerrno>
 #include <cstring>
 #include <iostream>
 
-ModeSelection::ModeSelection(SnakeBoard &b, Snake &s)
-    : board(b),
-      snake(s),
-      nickname()
+ModeSelection::ModeSelection(SnakeBoard& b, Snake& s) : board(b), snake(s), nickname()
 {
-    if (!font.loadFromFile("/usr/share/fonts/truetype/fonts-deva-extra/chandas1-2.ttf")) {
+    if (!font.loadFromFile(config::font_path)) {
         std::cerr << strerror(errno) << std::endl;
         abort();
     }
@@ -26,12 +26,13 @@ ModeSelection::ModeSelection(SnakeBoard &b, Snake &s)
 
     nickname_drawn.setFillColor(sf::Color::Black);
 
-    text_box.setSize(sf::Vector2f(text.getCharacterSize() * 15, text.getLocalBounds().height + 10));
+    text_box.setSize(
+        sf::Vector2f(text.getCharacterSize() * 15, text.getLocalBounds().height + 10));
     text_box.setFillColor(sf::Color::White);
     choice = 0;
 }
 
-std::string ModeSelection::Run(sf::RenderWindow &window)
+std::string ModeSelection::Run(sf::RenderWindow& window)
 {
     const int text_height = easy_mode.getLocalBounds().height;
     const int text_width = easy_mode.getLocalBounds().width;
@@ -39,8 +40,10 @@ std::string ModeSelection::Run(sf::RenderWindow &window)
     const int screen_y_center = window.getSize().y / 2 - text_height / 2;
 
     text_box.setPosition(screen_x_center - text.getCharacterSize() * 6, 4 * text_height);
-    nickname_drawn.setPosition(screen_x_center - text.getCharacterSize() * 6, 4 * text_height);
-    text.setPosition(window.getSize().x / 2 - text.getLocalBounds().width / 2, 2 * text_height);
+    nickname_drawn.setPosition(screen_x_center - text.getCharacterSize() * 6,
+                               4 * text_height);
+    text.setPosition(window.getSize().x / 2 - text.getLocalBounds().width / 2,
+                     2 * text_height);
     easy_mode.setPosition(screen_x_center, screen_y_center - 2 * text_height);
     normal_mode.setPosition(screen_x_center, screen_y_center);
     hard_mode.setPosition(screen_x_center, screen_y_center + 2 * text_height);
@@ -52,11 +55,14 @@ std::string ModeSelection::Run(sf::RenderWindow &window)
                 return "exit";
             }
             if (nickname.length() > 0) {
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
-                    board = SnakeBoard(board.get_height(), board.get_width(), SnakeBoard::GameMode(choice));
+                if (event.type == sf::Event::KeyPressed &&
+                    event.key.code == sf::Keyboard::Return) {
+                    board = SnakeBoard(board.get_height(),
+                                       board.get_width(),
+                                       SnakeBoard::GameMode(choice));
                     snake = Snake(board);
                     snake.set_name(nickname);
-                    return "game"; //game_screen
+                    return "game";  // game_screen
                 }
             }
             handle_events(event);
@@ -69,7 +75,7 @@ std::string ModeSelection::Run(sf::RenderWindow &window)
     }
 }
 
-void ModeSelection::draw(sf::RenderWindow &window)
+void ModeSelection::draw(sf::RenderWindow& window)
 {
     easy_mode.setFillColor(sf::Color::White);
     normal_mode.setFillColor(sf::Color::White);
@@ -95,7 +101,7 @@ void ModeSelection::draw(sf::RenderWindow &window)
     window.draw(nickname_drawn);
 }
 
-void ModeSelection::handle_events(sf::Event &event)
+void ModeSelection::handle_events(sf::Event& event)
 {
     if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Up) {

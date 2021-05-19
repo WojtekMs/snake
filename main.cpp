@@ -4,19 +4,23 @@
 #include "Screens.hpp"
 #include "Snake.hpp"
 #include "SnakeBoard.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <iostream>
 #include <map>
 
-
-
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(), "Snake", sf::Style::Fullscreen);
-    window.setMouseCursorVisible(false);
+   
+    sf::VideoMode windowMode{1200, 700};
+    if (auto modes = sf::VideoMode::getFullscreenModes(); !modes.empty()) {
+        windowMode = modes.front();
+    }
+    sf::RenderWindow window(windowMode, "Snake");
     std::map<std::string, cScreen*> screens;
-    SnakeBoard board(window.getSize().y / Consts::field_size, window.getSize().x / Consts::field_size);
+    SnakeBoard board(window.getSize().y / Consts::field_size,
+                     window.getSize().x / Consts::field_size);
     Snake snake(board);
     MainMenu menu(board, snake);
     ModeSelection mode_selec(board, snake);

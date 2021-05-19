@@ -1,6 +1,8 @@
 #include "Snake.hpp"
+
 #include "Ranking.hpp"
 #include "SnakeBoard.hpp"
+
 #include <algorithm>
 #include <climits>
 #include <fstream>
@@ -8,13 +10,12 @@
 #include <list>
 #include <vector>
 
-
-Snake::Snake(SnakeBoard &board)
-    : length(3),
-      body(),
-      s_board(board),
-      name("brak"),
-      fname("scores.dat")
+Snake::Snake(SnakeBoard& board) :
+  length(3),
+  body(),
+  s_board(board),
+  name("brak"),
+  fname("scores.dat")
 {
     for (int i = 0; i < length; ++i) {
         body.push_back(SnakePiece(length - i, 1));
@@ -25,23 +26,23 @@ Snake::Snake(SnakeBoard &board)
     player_score = 0;
     saved = false;
     switch (s_board.get_current_game_mode()) {
-    case SnakeBoard::GameMode::EASY: {
-        speed = 1.5;
-        delta_speed = 0.3;
-    } break;
-    case SnakeBoard::GameMode::NORMAL: {
-        speed = 2;
-        delta_speed = 0.4;
-    } break;
-    case SnakeBoard::GameMode::HARD: {
-        speed = 2.5;
-        delta_speed = 0.5;
-    } break;
+        case SnakeBoard::GameMode::EASY: {
+            speed = 1.5;
+            delta_speed = 0.3;
+        } break;
+        case SnakeBoard::GameMode::NORMAL: {
+            speed = 2;
+            delta_speed = 0.4;
+        } break;
+        case SnakeBoard::GameMode::HARD: {
+            speed = 2.5;
+            delta_speed = 0.5;
+        } break;
     }
     init_file();
 }
 
-bool Snake::SnakePiece::operator==(const Snake::SnakePiece &sp) const
+bool Snake::SnakePiece::operator==(const Snake::SnakePiece& sp) const
 {
     if (sp.x == this->x && sp.y == this->y)
         return true;
@@ -108,25 +109,25 @@ void Snake::move()
         new_element.y = body.front().y - 1;
     }
     switch (s_board.get_tile_info(body.front().x, body.front().y)) {
-    case 'T':
-        if (current_dir == Direction::UP) {
-            new_element.y = s_board.get_height() - 1;
-        }
-        break;
-    case 'B':
-        if (current_dir == Direction::DOWN) {
-            new_element.y = 0;
-        }
-        break;
-    case 'L':
-        if (current_dir == Direction::LEFT) {
-            new_element.x = s_board.get_width() - 1;
-        }
-        break;
-    case 'R':
-        if (current_dir == Direction::RIGHT) {
-            new_element.x = 0;
-        }
+        case 'T':
+            if (current_dir == Direction::UP) {
+                new_element.y = s_board.get_height() - 1;
+            }
+            break;
+        case 'B':
+            if (current_dir == Direction::DOWN) {
+                new_element.y = 0;
+            }
+            break;
+        case 'L':
+            if (current_dir == Direction::LEFT) {
+                new_element.x = s_board.get_width() - 1;
+            }
+            break;
+        case 'R':
+            if (current_dir == Direction::RIGHT) {
+                new_element.x = 0;
+            }
     }
     body.push_front(new_element);
     body.pop_back();
@@ -134,7 +135,9 @@ void Snake::move()
 
     if (s_board.get_tile_info(body.front().x, body.front().y) == 'X')
         current_game_state = GameState::FINISHED_LOSS;
-    if (std::find(std::next(body.begin()), body.end(), SnakePiece(body.front().x, body.front().y)) != body.end()) {
+    if (std::find(std::next(body.begin()),
+                  body.end(),
+                  SnakePiece(body.front().x, body.front().y)) != body.end()) {
         current_game_state = GameState::FINISHED_LOSS;
     }
 }
@@ -199,7 +202,6 @@ void Snake::update(sf::Time time_elapsed)
             save_score();
         }
         return;
-            
     }
     static sf::Time total_time;
     total_time += time_elapsed;
@@ -209,7 +211,8 @@ void Snake::update(sf::Time time_elapsed)
         move();
         total_time = sf::Time();
     }
-    if (body.front().x == s_board.get_food_x() && body.front().y == s_board.get_food_y()) {
+    if (body.front().x == s_board.get_food_x() &&
+        body.front().y == s_board.get_food_y()) {
         grow();
         s_board.draw_food();
         player_score += 10;
@@ -219,7 +222,7 @@ void Snake::update(sf::Time time_elapsed)
     }
 }
 
-Snake &Snake::operator=(const Snake &rhs)
+Snake& Snake::operator=(const Snake& rhs)
 {
     if (this == &rhs) {
         return *this;
@@ -242,9 +245,9 @@ Snake &Snake::operator=(const Snake &rhs)
 void Snake::save_score()
 {
     init_file();
-    int score_count = 0;   
+    int score_count = 0;
     std::fstream scores(fname, std::ios::out | std::ios::in);
-    scores.read((char *)&score_count, sizeof(score_count));
+    scores.read((char*)&score_count, sizeof(score_count));
     player_data p_data;
     std::strcpy(p_data.name, name.c_str());
     std::strcpy(p_data.mode, s_board.get_string_game_mode().c_str());
@@ -253,7 +256,7 @@ void Snake::save_score()
     int least_score_id = 0;
     int iterations = 0;
     if (score_count >= Consts::max_score_count) {
-        while (scores.read((char *)&p_data, sizeof(p_data))) {
+        while (scores.read((char*)&p_data, sizeof(p_data))) {
             if (p_data.score < least_score) {
                 least_score = p_data.score;
                 least_score_id = iterations;
@@ -267,26 +270,26 @@ void Snake::save_score()
             std::strcpy(p_data.name, name.c_str());
             std::strcpy(p_data.mode, s_board.get_string_game_mode().c_str());
             p_data.score = player_score;
-            scores.write((char *)&p_data, sizeof(p_data));
+            scores.write((char*)&p_data, sizeof(p_data));
         }
     } else {
         scores.seekp(0, std::ios_base::end);
-        scores.write((char *)&p_data, sizeof(p_data));
+        scores.write((char*)&p_data, sizeof(p_data));
         score_count++;
         scores.seekp(0);
-        scores.write((char *)&score_count, sizeof(score_count));
+        scores.write((char*)&score_count, sizeof(score_count));
     }
     scores.close();
     saved = true;
 }
 
 void Snake::init_file() const
-{   
+{
     std::ifstream test(fname);
     int score_count = 0;
     if (!test.is_open()) {
         std::ofstream init(fname, std::ios::out);
-        init.write((char *)&score_count, sizeof(int));
+        init.write((char*)&score_count, sizeof(int));
         init.close();
     }
     test.close();

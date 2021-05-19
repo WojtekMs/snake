@@ -2,19 +2,16 @@
 #define SNAKEBOARD_H_
 #include "Array2D.h"
 #include "Snake.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 
 class SnakeBoard
 {
-public:
-    enum GameMode {
-        EASY,
-        NORMAL,
-        HARD
-    };
+   public:
+    enum GameMode { EASY, NORMAL, HARD };
 
-private:
+   private:
     int height, width;
     Array2D<bool> board_obstacles;
     std::vector<int> horizontal_gate_x, vertical_gate_y;
@@ -29,7 +26,7 @@ private:
     bool out_of_range(int col, int row) const;
     friend void Snake::update(sf::Time time_elapsed);
 
-public:
+   public:
     explicit SnakeBoard(int h = 20, int w = 20, GameMode mode = EASY);
     char get_tile_info(int col, int row) const;
     int get_height() { return height; };

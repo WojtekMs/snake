@@ -18,16 +18,14 @@ class Array
         }
     }
 
-public:
-    explicit Array(int size) : data(size)
-    {
-    }
-    T &operator[](int idx)
+   public:
+    explicit Array(int size) : data(size) {}
+    T& operator[](int idx)
     {
         check_range(idx);
         return data[idx];
     }
-    const T &operator[](int idx) const
+    const T& operator[](int idx) const
     {
         check_range(idx);
         return data[idx];
@@ -46,14 +44,14 @@ class Array2D
         }
     }
 
-public:
+   public:
     explicit Array2D(int width, int height) : data(height, Array<T>(width)) {}
-    Array<T> &operator[](int idx)
+    Array<T>& operator[](int idx)
     {
         check_range(idx);
         return data[idx];
     }
-    const Array<T> &operator[](int idx) const
+    const Array<T>& operator[](int idx) const
     {
         check_range(idx);
         return data[idx];
@@ -63,19 +61,19 @@ public:
 template <>
 class Array<bool>
 {
-public:
+   public:
     class my_bool
     {
-    public:
+       public:
         bool value;
         my_bool(bool val = false) : value(val){};
-        inline friend std::ostream &operator<<(std::ostream &stream, my_bool rhs);
+        inline friend std::ostream& operator<<(std::ostream& stream, my_bool rhs);
         // bool my_bool::operator==(my_bool rhs);
         inline operator bool() const;
         inline operator bool();
     };
 
-private:
+   private:
     std::vector<my_bool> data;
     void check_range(int idx) const
     {
@@ -85,23 +83,21 @@ private:
         }
     }
 
-public:
-    explicit Array(int size) : data(size)
-    {
-    }
-    my_bool &operator[](int idx)
+   public:
+    explicit Array(int size) : data(size) {}
+    my_bool& operator[](int idx)
     {
         check_range(idx);
         return data[idx];
     }
-    const my_bool &operator[](int idx) const
+    const my_bool& operator[](int idx) const
     {
         check_range(idx);
         return data[idx];
     }
 };
 
-std::ostream &operator<<(std::ostream &stream, Array<bool>::my_bool rhs)
+std::ostream& operator<<(std::ostream& stream, Array<bool>::my_bool rhs)
 {
     stream << rhs.value;
     return stream;
@@ -115,14 +111,15 @@ std::ostream &operator<<(std::ostream &stream, Array<bool>::my_bool rhs)
 //     return false;
 // }
 
-Array<bool>::my_bool::operator bool() const {
+Array<bool>::my_bool::operator bool() const
+{
     return (const bool)value;
 }
 
-Array<bool>::my_bool::operator bool() {
+Array<bool>::my_bool::operator bool()
+{
     return value;
 }
-
 
 template <>
 class Array2D<bool>
@@ -136,14 +133,17 @@ class Array2D<bool>
         }
     }
 
-public:
-    explicit Array2D(int width, int height) : data(height, Array<Array<bool>::my_bool>(width)) {}
-    Array<Array<bool>::my_bool> &operator[](int idx)
+   public:
+    explicit Array2D(int width, int height) :
+      data(height, Array<Array<bool>::my_bool>(width))
+    {
+    }
+    Array<Array<bool>::my_bool>& operator[](int idx)
     {
         check_range(idx);
         return data[idx];
     }
-    const Array<Array<bool>::my_bool> &operator[](int idx) const
+    const Array<Array<bool>::my_bool>& operator[](int idx) const
     {
         check_range(idx);
         return data[idx];

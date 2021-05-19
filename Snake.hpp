@@ -1,22 +1,22 @@
 #ifndef SNAKE_HPP_
 #define SNAKE_HPP_
+#include "Game.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <iterator>
 #include <list>
 #include <string>
 #include <vector>
-#include "Game.hpp"
 
-namespace Consts {
-    const int lim = 20;
-    const int max_score_count = 10;
-    const int field_size = 32;
-}
-
+namespace Consts
+{
+const int lim = 20;
+const int max_score_count = 10;
+const int field_size = 32;
+}  // namespace Consts
 
 struct player_data {
-  
     char name[Consts::lim];
     char mode[Consts::lim];
     int score;
@@ -25,14 +25,9 @@ struct player_data {
 class SnakeBoard;
 class Snake
 {
-public:
-    friend std::string Game::Run(sf::RenderWindow &window);
-    enum Direction {
-        LEFT,
-        RIGHT,
-        UP,
-        DOWN
-    };
+   public:
+    friend std::string Game::Run(sf::RenderWindow& window);
+    enum Direction { LEFT, RIGHT, UP, DOWN };
 
     enum GameState {
         NOT_STARTED,
@@ -40,22 +35,22 @@ public:
         FINISHED_LOSS,
     };
 
-private:
+   private:
     int length;
     class SnakePiece
     {
-    public:
+       public:
         int x;
         int y;
         explicit SnakePiece(int x = 0, int y = 0) : x(x), y(y){};
-        bool operator==(const SnakePiece &sp) const;
+        bool operator==(const SnakePiece& sp) const;
     };
     std::list<Snake::SnakePiece> body;
-    SnakeBoard &s_board;
+    SnakeBoard& s_board;
     int player_score;
     std::string name;
-    float speed;       //measured in field per second
-    float delta_speed; //the increase of speed after eating food
+    float speed;        // measured in field per second
+    float delta_speed;  // the increase of speed after eating food
     bool moved_after_turn;
     GameState current_game_state;
     Direction current_dir;
@@ -67,23 +62,23 @@ private:
     void move();
     void grow();
 
-public:
-    explicit Snake(SnakeBoard &board);
+   public:
+    explicit Snake(SnakeBoard& board);
     void turn(Direction dir);
     bool contains(int col, int row) const;
     void update(sf::Time time_elapsed);
-    void set_name(const std::string &n) { name = n; };
-    Snake &operator=(const Snake &rhs);
-    
+    void set_name(const std::string& n) { name = n; };
+    Snake& operator=(const Snake& rhs);
+
     void save_score();
     void init_file() const;
-    
+
     GameState get_game_state() const { return current_game_state; };
-    const SnakePiece &get_head() const { return body.front(); };
+    const SnakePiece& get_head() const { return body.front(); };
     float get_speed() const { return speed; };
     float get_delta_speed() const { return delta_speed; };
-    const std::string &get_name() { return name; };
-    const std::string &get_fname() { return fname; };
+    const std::string& get_name() { return name; };
+    const std::string& get_fname() { return fname; };
     Direction get_current_dir() const { return current_dir; };
     int get_length() const { return length; };
 };

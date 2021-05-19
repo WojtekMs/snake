@@ -1,13 +1,13 @@
 #include "MainMenu.hpp"
 
-MainMenu::MainMenu(SnakeBoard &b, Snake &s)
-    : board(b),
-      snake(s)
+#include "config.hpp"
+
+MainMenu::MainMenu(SnakeBoard& b, Snake& s) : board(b), snake(s)
 {
     int choice = 1;
     current_option = Option(choice);
     current_menu_state = MainMenu::State::GAME_NOT_STARTED;
-    if (!font.loadFromFile("/usr/share/fonts/truetype/fonts-deva-extra/chandas1-2.ttf")) {
+    if (!font.loadFromFile(config::font_path)) {
         std::cerr << strerror(errno) << std::endl;
         abort();
     }
@@ -21,7 +21,7 @@ MainMenu::MainMenu(SnakeBoard &b, Snake &s)
     text_exit.setString("Exit");
 }
 
-std::string MainMenu::Run(sf::RenderWindow &window)
+std::string MainMenu::Run(sf::RenderWindow& window)
 {
     const int screen_height = window.getSize().y;
     const int screen_width = window.getSize().x;
@@ -43,38 +43,40 @@ std::string MainMenu::Run(sf::RenderWindow &window)
     while (true) {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                return "exit"; //will exit the application in the main function
+                return "exit";  // will exit the application in the main function
             }
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
+            if (event.type == sf::Event::KeyPressed &&
+                event.key.code == sf::Keyboard::Return) {
                 return chosen_screen();
             }
             handle_events(event);
         }
         draw_options(window);
     }
-    return "exit"; //normally never reaches this place
+    return "exit";  // normally never reaches this place
 }
 
-void MainMenu::set_menu_state() {
+void MainMenu::set_menu_state()
+{
     switch (snake.get_game_state()) {
-    case Snake::GameState::RUNNING:
-        current_menu_state = MainMenu::State::GAME_STARTED;
-        break;
-    case Snake::GameState::NOT_STARTED:
-    case Snake::GameState::FINISHED_LOSS:
-        current_menu_state = MainMenu::State::GAME_NOT_STARTED;
-    default:
-        break;
+        case Snake::GameState::RUNNING:
+            current_menu_state = MainMenu::State::GAME_STARTED;
+            break;
+        case Snake::GameState::NOT_STARTED:
+        case Snake::GameState::FINISHED_LOSS:
+            current_menu_state = MainMenu::State::GAME_NOT_STARTED;
+        default:
+            break;
     }
 }
 
-void MainMenu::draw_options(sf::RenderWindow &window)
+void MainMenu::draw_options(sf::RenderWindow& window)
 {
     text_play.setFillColor(sf::Color::White);
     text_continue.setFillColor(sf::Color::White);
     text_ranking.setFillColor(sf::Color::White);
     text_exit.setFillColor(sf::Color::White);
-    
+
     window.clear();
 
     if (current_option == MainMenu::Option::CONTINUE) {
@@ -97,20 +99,29 @@ void MainMenu::draw_options(sf::RenderWindow &window)
     window.display();
 }
 
-void MainMenu::handle_events(sf::Event &event)
+void MainMenu::handle_events(sf::Event& event)
 {
     if (event.type == sf::Event::KeyPressed) {
-
         if (event.key.code == sf::Keyboard::Up) {
             choice--;
-            choice = (current_menu_state == MainMenu::State::GAME_NOT_STARTED && choice < 1) ? 3 : choice;
-            choice = (current_menu_state == MainMenu::State::GAME_STARTED && choice < 0) ? 3 : choice;
+            choice =
+                (current_menu_state == MainMenu::State::GAME_NOT_STARTED && choice < 1)
+                    ? 3
+                    : choice;
+            choice = (current_menu_state == MainMenu::State::GAME_STARTED && choice < 0)
+                         ? 3
+                         : choice;
             current_option = Option(choice);
         }
         if (event.key.code == sf::Keyboard::Down) {
             choice++;
-            choice = (current_menu_state == MainMenu::State::GAME_NOT_STARTED && choice > 3) ? 1 : choice;
-            choice = (current_menu_state == MainMenu::State::GAME_STARTED && choice > 3) ? 0 : choice;
+            choice =
+                (current_menu_state == MainMenu::State::GAME_NOT_STARTED && choice > 3)
+                    ? 1
+                    : choice;
+            choice = (current_menu_state == MainMenu::State::GAME_STARTED && choice > 3)
+                         ? 0
+                         : choice;
             current_option = Option(choice);
         }
     }
@@ -119,13 +130,13 @@ void MainMenu::handle_events(sf::Event &event)
 std::string MainMenu::chosen_screen()
 {
     if (current_option == Option::CONTINUE) {
-        return "game"; 
+        return "game";
     }
     if (current_option == Option::NEW_GAME) {
         if (snake.get_game_state() == Snake::GameState::RUNNING) {
             current_menu_state = MainMenu::State::GAME_STARTED;
         }
-        return "mode selection"; 
+        return "mode selection";
     }
     if (current_option == Option::RANKING) {
         return "ranking";

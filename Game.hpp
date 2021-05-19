@@ -1,14 +1,15 @@
 #ifndef SFMLVIEW_H_
 #define SFMLVIEW_H_
-#include <SFML/Graphics.hpp>
 #include "cScreen.hpp"
+
+#include <SFML/Graphics.hpp>
 
 class Snake;
 class SnakeBoard;
 class Game : public cScreen
 {
-    SnakeBoard & view_board;
-    Snake & view_snake;
+    SnakeBoard& view_board;
+    Snake& view_snake;
     float field_size = 32;
     sf::Sprite wall_sprite;
     sf::Sprite grass_sprite;
@@ -27,19 +28,18 @@ class Game : public cScreen
     sf::Time total_time;
     unsigned int window_width;
     unsigned int window_height;
-    void handle_events(sf::Event &event);
-    void draw_end_game_screen(sf::RenderWindow &window);
+    void handle_events(sf::Event& event);
+    void draw_end_game_screen(sf::RenderWindow& window);
 
-    public:
-    Game(SnakeBoard & view, Snake & snake);
-    void draw(sf::RenderWindow & window);
+   public:
+    Game(SnakeBoard& view, Snake& snake);
+    void draw(sf::RenderWindow& window);
     unsigned int get_window_width() const { return window_width; };
     unsigned int get_window_height() const { return window_height; };
     void update(sf::Time time_elapsed);
-    virtual  std::string Run(sf::RenderWindow & window);
-    Game (const Game & rhs);
-    Game & operator=(const Game & rhs);
+    virtual std::string Run(sf::RenderWindow& window);
+    Game(const Game& rhs);
+    Game& operator=(const Game& rhs);
 };
 
-
-#endif //SFMLVIEW_H_
+#endif  // SFMLVIEW_H_
