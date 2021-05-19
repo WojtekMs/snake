@@ -5,9 +5,17 @@ The best 10 scores are kept saved in a file.
 
 ## Dependencies
 To build this application you need:
-- CMake configured with SFML library
-- SFML library
-- C++ compiler ;)
+- SFML >= 2.5.1 library
+- C++17 compiler ;)
+
+## Building
+In order to build this project:
+- `mkdir build`
+- `cd build`
+- `cmake ..`
+- `make -j`
+- `make install`
+- `./snake`
 
 ## Built with
 - CMake
